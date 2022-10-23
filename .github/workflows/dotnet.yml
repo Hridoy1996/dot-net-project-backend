@@ -1,0 +1,27 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+
+#    - name: Restore dependencies
+#      run: sudo dotnet restore 
+#    - name: Build
+#      run: sudo dotnet build --no-restore 
+#    - name: Test
+#      run: sudo dotnet test --no-build --verbosity normal 
+#    - name: Publish
+#      run: sudo dotnet publish
+#    - name : dotnet watch stop
+#      run: sudo kill -2 $(pgrep dotnet)
+#    - name: dotnet TeleMedicine Service Stop
+#      run: sudo kill -2 $(pgrep TeleMedicine)

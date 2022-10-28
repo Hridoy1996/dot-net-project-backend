@@ -2,7 +2,7 @@
 {
     public class FinancialServiceInfo
     {
-        public string? FinancialService { get; set; }
+        public string? Type { get; set; }
         public BankFinancialServiceInfo? BankFinancialServiceInfo { get; set; }
         public MobileFinancialServiceInfo? MobileFinancialServiceInfo { get; set; }
     }

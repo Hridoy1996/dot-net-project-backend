@@ -39,7 +39,7 @@ namespace Commands.UAM
 
     public class FinancialServiceInfoCommand
     {
-        public string? FinancialService { get; set; }
+        public string? Type { get; set; }
         public BankFinancialServiceInfoCommand? BankFinancialServiceInfo { get; set; }
         public MobileFinancialServiceInfoCommand? MobileFinancialServiceInfo { get; set; }
     }

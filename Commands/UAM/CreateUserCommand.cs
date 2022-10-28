@@ -14,6 +14,7 @@ namespace Commands.UAM
             Specializations = new List<string>();
         }
 
+        public string? Gender { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Address { get; set; }
@@ -21,7 +22,6 @@ namespace Commands.UAM
         public string Password { get; set; } = null!;
         [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateOnly DOB { get; set; }
-        public string? Salutation { get; set; }
         public string? CountryName { get; set; }
         public string? ProfileImageId { get; set; }
         public DateTime UserCreationDate { get; set; }

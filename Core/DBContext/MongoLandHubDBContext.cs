@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repository
+namespace Infrastructure.Core.Repository
 {
     public class MongoTeleMedicineDBContext : IMongoTeleMedicineDBContext
         {

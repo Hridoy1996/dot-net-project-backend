@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Contract;
-using Domains.DBModels;
+using Domains.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Core.Managers
@@ -19,22 +19,25 @@ namespace Infrastructure.Core.Managers
         }
         public async Task<bool> Login(string email, string password = "") 
         {
-            var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
-            return result.Succeeded;
+            var user = _userManager.Users.FirstOrDefault(x => x.NormalizedEmail == email)?? new TelemedicineAppUser();
+
+            await _signInManager.SignInAsync(user, false);
+           // var result = await _signInManager.SignInAsync();
+            return true;
         }
 
-        public async Task<bool> RegisterUserAsync(TelemedicineAppUser user, string password = "")
+        public async Task<bool> RegisterUserAsync(TelemedicineAppUser appUser, string password = "")
         {
             try
             {
-                var absence = _userManager.Users.FirstOrDefault(x => x.NormalizedEmail == user.NormalizedEmail);
+                var user = _userManager.Users.FirstOrDefault(x => x.NormalizedEmail == appUser.NormalizedEmail);
 
-                if (absence != null)
+                if (user != null)
                 {
                     return false;
                 }
 
-                var result = await _userManager.CreateAsync(user, password);
+                var result = await _userManager.CreateAsync(appUser, password);
 
                 return result.Succeeded;
             }

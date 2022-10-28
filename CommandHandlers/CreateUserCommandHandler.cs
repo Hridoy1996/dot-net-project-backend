@@ -1,9 +1,7 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using Commands.UAM;
 using Contract;
-using Domains.DBModels;
+using Domains.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Runtime.CompilerServices;
@@ -27,11 +25,17 @@ namespace CommandHandler
 
         protected override async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
+            try
+            {
+                var user = _mapper.Map<TelemedicineAppUser>(request);
+                var result = await _userManagerServices.RegisterUserAsync(user, request.Password);
 
-            var user = _mapper.Map<TelemedicineAppUser>(request);
-            var result = await _userManagerServices.RegisterUserAsync(user, request.Password);
-            
-            return ;
+                return;
+            }
+            catch(Exception ex)
+            {
+
+            }
 
         }
     }

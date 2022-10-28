@@ -8,7 +8,6 @@ namespace TeleMedicine_WebService.Controllers
     [Route("api/[controller]/[action]")]
     public class UserServiceController : ControllerBase
     {
-
         private readonly ILogger<UserServiceController> _logger;
         private readonly IMediator _mediator;
 

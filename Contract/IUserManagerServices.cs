@@ -1,5 +1,4 @@
-﻿using Domains.DBModels;
-
+﻿using Domains.Entities;
 namespace Contract
 {
     public interface IUserManagerServices

@@ -20,6 +20,22 @@ namespace Shared.Enums
         Unmarried,
         [BsonRepresentation(BsonType.String)]
         Divorced
+    }  
+    
+    public enum FinancialServiceType
+    {
+        [BsonRepresentation(BsonType.String)]
+        BFS,
+        [BsonRepresentation(BsonType.String)]
+        MFS
+    } 
+    
+    public enum MobileServiceProvider
+    {
+        [BsonRepresentation(BsonType.String)]
+        Bkash,
+        [BsonRepresentation(BsonType.String)]
+        Nagad
     }
 
     public enum BloodGroup

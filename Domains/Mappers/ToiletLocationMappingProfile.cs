@@ -1,18 +1,31 @@
 ﻿using AutoMapper;
 using Commands.UAM;
-using Domains.DBModels;
+using Domains.Entities;
 
 namespace Domains.Mappers
 {
-    public class ToiletLocationMappingProfile : Profile
+    public class MappingProfiles : Profile
     {
-        public ToiletLocationMappingProfile()
+        public MappingProfiles()
         {
-            CreateMap<CreateUserCommand, TelemedicineAppUser>(MemberList.Source)
+            CreateMap<FinancialServiceInfoCommand, FinancialServiceInfo>();
+            CreateMap<MobileFinancialServiceInfoCommand, MobileFinancialServiceInfo>();
+            CreateMap<BankFinancialServiceInfoCommand, BankFinancialServiceInfo>();
+            CreateMap<CreateUserCommand, TelemedicineAppUser>()
                .ForMember(
                     dest => dest.Id,
                     opt => opt.MapFrom(src => src.ItemId ?? Guid.NewGuid().ToString())
+                )
+               .ForMember(
+                    dest => dest.UserName,
+                    opt => opt.MapFrom(src => src.Email)
+                )
+               .ForMember(
+                    dest => dest.UserName,
+                    opt => opt.MapFrom(src => src.Email)
                 );
+           
+           
 
             //  public InfrastructureMappingProfile()
             //{

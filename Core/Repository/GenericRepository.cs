@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domains.Repository
+namespace Infrastructure.Core.Repository
 {
     public class GenericRepository : IGenericRepository
     {

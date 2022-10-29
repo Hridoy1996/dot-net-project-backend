@@ -18,12 +18,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(CreateUserCommand).Assembly, typeof(CreateUserCommandHandler).Assembly);
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
-builder.Services.AddCors(opt =>
+
+
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("CorsPolicy", policy =>
-    {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080");
-    });
+    options.AddPolicy("CorsPolicy",
+        policy =>
+        {
+            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080", "https://walrus-app-tbnh4.ondigitalocean.app");
+        });
 });
 
 var config = builder.Configuration;
@@ -47,6 +50,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

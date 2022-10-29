@@ -29,6 +29,16 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy",
+                policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
+                        .WithMethods("Post","PUT", "DELETE", "GET");
+                });
+});
+
 var config = builder.Configuration;
 var mongoDbContext = new MongoDbContext(config.GetSection("Mongosettings:Connection").Value, config.GetSection("Mongosettings:DatabaseName").Value);
 

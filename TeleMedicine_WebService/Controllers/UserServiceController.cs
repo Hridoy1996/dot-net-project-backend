@@ -23,7 +23,6 @@ namespace TeleMedicine_WebService.Controllers
             _mediator.Send(command);
 
             return Ok();
-
         }
     }
 }

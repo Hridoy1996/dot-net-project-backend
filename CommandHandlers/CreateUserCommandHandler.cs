@@ -3,8 +3,6 @@ using Commands.UAM;
 using Contract;
 using Domains.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using System.Runtime.CompilerServices;
 
 
 namespace CommandHandler
@@ -19,7 +17,7 @@ namespace CommandHandler
             IUserManagerServices userManagerServices)
         {
             _mapper = mapper;
-           _userManagerServices = userManagerServices;
+            _userManagerServices = userManagerServices;
         }
 
 
@@ -32,7 +30,7 @@ namespace CommandHandler
 
                 return;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }

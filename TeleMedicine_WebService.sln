@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeleMedicine_WebService", "TeleMedicine_WebService\TeleMedicine_WebService.csproj", "{C0D36B9F-933A-4853-8EF1-D3CE44781DD1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands", "Commands\Commands.csproj", "{E2713ADA-6C7B-457D-A352-D2A4475C23DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Command", "Commands\Command.csproj", "{E2713ADA-6C7B-457D-A352-D2A4475C23DF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandHandlers", "CommandHandlers\CommandHandlers.csproj", "{9DE15EDE-C569-421E-8F19-B44A29E8DC4D}"
 EndProject
@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contract", "Contract\Contra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{D40F6CA4-054F-4509-9D9C-9DF424D18F4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conversions", "Conversions\Conversions.csproj", "{1C0E2207-D7A0-46E5-A9F5-785A7A2AA869}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conversions", "Conversions\Conversions.csproj", "{1C0E2207-D7A0-46E5-A9F5-785A7A2AA869}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queries", "Queries\Queries.csproj", "{63EA02C3-7778-4113-943D-CC82486CBDBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{1C0E2207-D7A0-46E5-A9F5-785A7A2AA869}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0E2207-D7A0-46E5-A9F5-785A7A2AA869}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0E2207-D7A0-46E5-A9F5-785A7A2AA869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63EA02C3-7778-4113-943D-CC82486CBDBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EA02C3-7778-4113-943D-CC82486CBDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63EA02C3-7778-4113-943D-CC82486CBDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EA02C3-7778-4113-943D-CC82486CBDBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,6 +5,7 @@ using Domains.Entities;
 using Domains.Entities;
 using Domains.Mappers;
 using Infrastructure.Core.Managers;
+using Infrastructure.Core.Services.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MongoDbGenericRepository;
@@ -36,6 +37,7 @@ builder.Services.AddIdentity<TelemedicineAppUser, TelemedicineAppRole>()
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
 builder.Services.AddTransient<IUserManagerServices, UserManagerServices>();
+builder.Services.AddTransient<IFileStorgaeCommunicationService, FileStorgaeCommunicationService>();
 
 var app = builder.Build();
 

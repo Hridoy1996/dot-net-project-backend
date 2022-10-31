@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy",
         policy =>
         {
-            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:8080", "https://walrus-app-tbnh4.ondigitalocean.app");
+            policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
         });
 });
 

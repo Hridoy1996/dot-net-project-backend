@@ -17,13 +17,14 @@ namespace Infrastructure.Core.Managers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        public async Task<bool> Login(string email, string password = "") 
-        {
-            var user = _userManager.Users.FirstOrDefault(x => x.NormalizedEmail == email)?? new TelemedicineAppUser();
 
-            await _signInManager.SignInAsync(user, false);
-           // var result = await _signInManager.SignInAsync();
-            return true;
+        public async Task<bool> Login(string userName, string password = "") 
+        {
+            var user = _userManager.Users.FirstOrDefault(x => x.UserName == userName) ?? new TelemedicineAppUser();
+
+            var result = await _signInManager.PasswordSignInAsync(userName, password, false, lockoutOnFailure: false);
+
+            return result.Succeeded;
         }
 
         public async Task<bool> RegisterUserAsync(TelemedicineAppUser appUser, string password = "")

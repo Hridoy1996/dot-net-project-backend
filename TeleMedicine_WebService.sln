@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conversions", "Conversions\Conversions.csproj", "{1C0E2207-D7A0-46E5-A9F5-785A7A2AA869}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Queries", "Queries\Queries.csproj", "{63EA02C3-7778-4113-943D-CC82486CBDBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "Queries\Queries.csproj", "{63EA02C3-7778-4113-943D-CC82486CBDBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryHandler", "QueryHandler\QueryHandler.csproj", "{8AD015DC-714E-44D5-B786-B79E2F74A783}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{63EA02C3-7778-4113-943D-CC82486CBDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63EA02C3-7778-4113-943D-CC82486CBDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63EA02C3-7778-4113-943D-CC82486CBDBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AD015DC-714E-44D5-B786-B79E2F74A783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD015DC-714E-44D5-B786-B79E2F74A783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD015DC-714E-44D5-B786-B79E2F74A783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD015DC-714E-44D5-B786-B79E2F74A783}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

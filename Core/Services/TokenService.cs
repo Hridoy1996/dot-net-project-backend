@@ -20,14 +20,15 @@ namespace Infrastructure.Core.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:key"]));
         }
 
-        public string CreateTokenAsync(TelemedicineAppUser appicationUser)
+        public string CreateTokenAsync(string phoneNumber, string userId, string displayName, List<string> roles)
         { 
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, appicationUser.Email),
-                new Claim(ClaimTypes.GivenName, $"{appicationUser.FirstName} {appicationUser.LastName}"),
-                new Claim("Roles", JsonConvert.SerializeObject(appicationUser.Roles)),
+                new Claim(ClaimTypes.HomePhone, phoneNumber),
+                new Claim("UserId", userId),
+                new Claim(ClaimTypes.GivenName, displayName),
+                new Claim("Roles", JsonConvert.SerializeObject(roles)),
             };
 
             var token = GenerateToken(claims);

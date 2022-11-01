@@ -1,6 +1,8 @@
 ﻿using Commands.UAM;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Queries.U;
+using Queries.UAM;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -19,6 +21,14 @@ namespace TeleMedicine_WebService.Controllers
 
         [HttpPost]
         public ActionResult Register([FromBody] CreateUserCommand command)
+        {
+            _mediator.Send(command);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public ActionResult Login([FromBody] LoginQuery command)
         {
             _mediator.Send(command);
 

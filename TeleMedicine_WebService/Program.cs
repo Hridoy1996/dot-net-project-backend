@@ -22,11 +22,13 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy",
-        policy =>
-        {
-            policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-        });
+    options.AddPolicy("AllowAllOrigins",
+          builder =>
+          {
+              builder.AllowAnyOrigin()
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
+          });
 });
 
 
@@ -50,7 +52,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("CorsPolicy");
+app.UseCors("AllowAllOrigins");
+app.UseCors("AllowAllHeaders");
 
 app.UseHttpsRedirection();
 

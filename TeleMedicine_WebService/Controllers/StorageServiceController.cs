@@ -18,7 +18,7 @@ namespace TeleMedicine_WebService.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload([FromBody] FileUploadCommand command)
+        public ActionResult UploadFile([FromBody] FileUploadCommand command)
         {
             _mediator.Send(command);
 

@@ -2,6 +2,7 @@ using CommandHandler;
 using Commands.UAM;
 using Contract;
 using Domains.Entities;
+using Domains.Entities;
 using Domains.Mappers;
 using Infrastructure.Core.Managers;
 using MediatR;
@@ -52,11 +53,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
 
 app.UseRouting();  // first
 
 app.UseCors("xyz");
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

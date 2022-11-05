@@ -22,7 +22,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
+    options.AddPolicy("xyz",
           builder =>
           {
               builder.AllowAnyOrigin()
@@ -53,14 +53,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+//app.UseHttpsRedirection();
 
 app.UseRouting();  // first
 
-app.UseCors("AllowAllOrigins");
-app.UseCors("AllowAllHeaders");
-
-app.UseHttpsRedirection();
+app.UseCors("xyz");
 
 app.UseAuthorization();
 

@@ -1,6 +1,7 @@
 ﻿using Commands.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -18,12 +19,9 @@ namespace TeleMedicine_WebService.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadFile([FromBody] FileUploadCommand command)
+        public async Task<CommonResponseModel> UploadFile([FromBody] FileUploadCommand command)
         {
-            _mediator.Send(command);
-
-            return Ok();
-
+            return (CommonResponseModel) await _mediator.Send(command);
         }
 
         [HttpGet]

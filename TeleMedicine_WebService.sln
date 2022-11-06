@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeleMedicine_WebService", "TeleMedicine_WebService\TeleMedicine_WebService.csproj", "{C0D36B9F-933A-4853-8EF1-D3CE44781DD1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Command", "Commands\Command.csproj", "{E2713ADA-6C7B-457D-A352-D2A4475C23DF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandHandlers", "CommandHandlers\CommandHandlers.csproj", "{9DE15EDE-C569-421E-8F19-B44A29E8DC4D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains", "Domains\Domains.csproj", "{544E06CD-FDC6-46BA-90C6-482AF108BC01}"
@@ -21,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conversions", "Conversions\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Queries", "Queries\Queries.csproj", "{63EA02C3-7778-4113-943D-CC82486CBDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryHandler", "QueryHandler\QueryHandler.csproj", "{8AD015DC-714E-44D5-B786-B79E2F74A783}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryHandler", "QueryHandler\QueryHandler.csproj", "{8AD015DC-714E-44D5-B786-B79E2F74A783}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands", "Commands\Commands.csproj", "{9DCC3445-FD95-41F5-8497-502487B6D07B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{C0D36B9F-933A-4853-8EF1-D3CE44781DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0D36B9F-933A-4853-8EF1-D3CE44781DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0D36B9F-933A-4853-8EF1-D3CE44781DD1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E2713ADA-6C7B-457D-A352-D2A4475C23DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2713ADA-6C7B-457D-A352-D2A4475C23DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2713ADA-6C7B-457D-A352-D2A4475C23DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2713ADA-6C7B-457D-A352-D2A4475C23DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9DE15EDE-C569-421E-8F19-B44A29E8DC4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9DE15EDE-C569-421E-8F19-B44A29E8DC4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DE15EDE-C569-421E-8F19-B44A29E8DC4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{8AD015DC-714E-44D5-B786-B79E2F74A783}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AD015DC-714E-44D5-B786-B79E2F74A783}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AD015DC-714E-44D5-B786-B79E2F74A783}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DCC3445-FD95-41F5-8497-502487B6D07B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DCC3445-FD95-41F5-8497-502487B6D07B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DCC3445-FD95-41F5-8497-502487B6D07B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DCC3445-FD95-41F5-8497-502487B6D07B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

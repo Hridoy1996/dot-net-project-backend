@@ -1,7 +1,6 @@
 ﻿using Commands.UAM;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Queries.U;
 using Queries.UAM;
 
 namespace TeleMedicine_WebService.Controllers

@@ -1,4 +1,3 @@
-using AspNet.Security.OAuth.Validation;
 using CommandHandler;
 using Commands.UAM;
 using Contract;
@@ -11,10 +10,8 @@ using Infrastructure.Core.Services.Test;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDbGenericRepository;
-using System.Text;
 using TeleMedicine_WebService.Pipeline;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,8 +58,8 @@ builder.Services.AddAuthentication(option =>
         ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = config["Token:Issuer"],       
-        ValidAudience = config["Token:Issuer"],     
+        ValidIssuer = config["Token:Issuer"],
+        ValidAudience = config["Token:Issuer"],
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(config["Token:Key"])) // Jwt:Key - config value 
     };
 });

@@ -27,7 +27,7 @@ namespace Infrastructure.Core.Services.Storage
             _logger = logger;
         }
 
-        public void UploadFile(FileUploadCommand command)
+        public bool UploadFile(FileUploadCommand command)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Infrastructure.Core.Services.Storage
                     MaxErrorRetry = 8,
                 });
 
-                byte[] bytes = System.Convert.FromBase64String(command?.Base64String ?? "");
+                byte[] bytes = System.Convert.FromBase64String(command?.Base64 ?? "");
 
                 TransferUtility fileTransferUtility = new(s3Client);
 
@@ -54,10 +54,14 @@ namespace Infrastructure.Core.Services.Storage
                 };
 
                 fileTransferUtility.Upload(fileTransferUtilityRequest);
+
+                return true;
             }
             catch (Exception exception)
             {
                 _logger.LogError($"Error in FileStorgaeCommunicationService class, Upload methid \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return false;
             }
         }
 
@@ -72,7 +76,7 @@ namespace Infrastructure.Core.Services.Storage
                     MaxErrorRetry = 8,
                 });
 
-                byte[] bytes = System.Convert.FromBase64String(command?.Base64String ?? "");
+                byte[] bytes = System.Convert.FromBase64String(command?.Base64 ?? "");
 
                 TransferUtility fileTransferUtility = new(s3Client);
 

@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommandHandlers\CommandHandlers.csproj" />
-    <ProjectReference Include="..\Commands\Command.csproj" />
     <ProjectReference Include="..\Core\Infrastructure.Core.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using Shared.Models;
 
 namespace Commands.Storage
 {
-    public class FileUploadCommand : IRequest
+    public class FileUploadCommand : IRequest<CommonResponseModel>
     {
         public FileUploadCommand()
         {
@@ -10,7 +11,7 @@ namespace Commands.Storage
         }
 
         public string? FileName { get; set; }
-        public string? Base64String { get; set; }
+        public string? Base64 { get; set; }
         public string? FileId { get; set; }
         public IEnumerable<string> Tags { get; set; }
     }

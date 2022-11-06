@@ -2,6 +2,7 @@
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Queries.UAM;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -25,26 +26,15 @@ namespace TeleMedicine_WebService.Controllers
             {
                 _mediator.Send(command);
 
-                return new CRM
-                {
-                    msg = "success",
-                    IsSucceed = true
-                };
-            }
-            catch
-            {
-                return new CRM
-                {
-                    msg = "failed",
-                    IsSucceed = true
-                };
-            }
+            return Ok();
         }
 
-        public class CRM
+        [HttpPost]
+        public ActionResult Login([FromBody] LoginQuery command)
         {
-            public string? msg { get; set; }
-            public bool IsSucceed { get; set; }
+            _mediator.Send(command);
+
+            return Ok();
         }
     }
 }

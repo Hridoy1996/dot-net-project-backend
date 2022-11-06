@@ -2,11 +2,15 @@ using CommandHandler;
 using Commands.UAM;
 using Contract;
 using Domains.Entities;
-using Domains.Entities;
 using Domains.Mappers;
 using Infrastructure.Core.Managers;
+using Infrastructure.Core.Services;
+using Infrastructure.Core.Services.Storage;
+using Infrastructure.Core.Services.Test;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using MongoDbGenericRepository;
 using TeleMedicine_WebService.Pipeline;
 
@@ -42,7 +46,35 @@ builder.Services.AddIdentity<TelemedicineAppUser, TelemedicineAppRole>()
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<TestServices>();
 builder.Services.AddTransient<IUserManagerServices, UserManagerServices>();
+builder.Services.AddTransient<IFileStorgaeCommunicationService, FileStorgaeCommunicationService>();
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(option =>
+{
+    option.SaveToken = true;
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        SaveSigninToken = true,
+        ValidateIssuer = true,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = config["Token:Issuer"],
+        ValidAudience = config["Token:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(config["Token:Key"])) // Jwt:Key - config value 
+    };
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole",
+         policy => policy.RequireRole("Administrator"));
+});
 
 var app = builder.Build();
 
@@ -62,6 +94,7 @@ app.UseCors("AllowAllHeaders");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

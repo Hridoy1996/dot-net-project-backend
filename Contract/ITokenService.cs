@@ -4,6 +4,6 @@ namespace Contract
 {
     public interface ITokenService
     {
-        string CreateTokenAsync(TelemedicineAppUser appicationUser);
+        string CreateTokenAsync(string phoneNumber, string userId, string displayName, List<string> roles);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Commands.UAM;
-using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Queries.UAM;
@@ -20,13 +19,18 @@ namespace TeleMedicine_WebService.Controllers
         }
 
         [HttpPost]
-        public CRM Register([FromBody] CreateUserCommand command)
+        public ActionResult Register([FromBody] CreateUserCommand command)
         {
             try
             {
                 _mediator.Send(command);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
@@ -36,6 +40,6 @@ namespace TeleMedicine_WebService.Controllers
 
             return Ok();
         }
+        }
     }
-}
 

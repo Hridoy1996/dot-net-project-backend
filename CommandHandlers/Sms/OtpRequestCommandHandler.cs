@@ -1,8 +1,6 @@
 ﻿using Commands.SMS;
-using Commands.UAM;
 using Contract;
 using MediatR;
-using Shared.Models;
 
 namespace CommandHandlers.Sms
 {
@@ -29,11 +27,25 @@ namespace CommandHandlers.Sms
 
             var addOtpKeyTask = _keyStore.AddKeyWithExpiryAsync($"TelemedicineOtp_{request.MobileNumber}", hashedOtp, 1000 * 60 * 5);
 
-            await _smsService.SendTextMessageAsync(request.Otp, request.MobileNumber);
+            await _smsService.SendTextMessageAsync(request.Otp, MakeMobileNumberElevenDigit(request.MobileNumber));
 
             await addOtpKeyTask;
 
             return;
+        }
+
+        private string MakeMobileNumberElevenDigit(string? mobileNumber)
+        {
+            if (mobileNumber?.Length == 10)
+            {
+                return $"0{mobileNumber}";
+            }
+            else if (mobileNumber?.Length == 11)
+            {
+                return mobileNumber;
+            }
+
+            return string.Empty;
         }
     }
 }

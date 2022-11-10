@@ -19,6 +19,11 @@ namespace Infrastructure.Core.SmsService
         {
             try
             {
+                if(string.IsNullOrEmpty(message) || string.IsNullOrEmpty(phoneNumber))
+                {
+                    return false;
+                }
+
                 var values = new List<KeyValuePair<string, string>>();
 
                 values.Add(new KeyValuePair<string, string>("token", _config["SmsProviderToken"])); 

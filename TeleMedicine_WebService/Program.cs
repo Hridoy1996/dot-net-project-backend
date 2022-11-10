@@ -3,18 +3,23 @@ using Commands.UAM;
 using Contract;
 using Domains.Entities;
 using Domains.Mappers;
+using Infrastructure.Core.Caching;
 using Infrastructure.Core.Managers;
 using Infrastructure.Core.Services;
 using Infrastructure.Core.Services.Storage;
 using Infrastructure.Core.Services.Test;
+using Infrastructure.Core.SmsService;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MongoDbGenericRepository;
+using StackExchange.Redis;
 using TeleMedicine_WebService.Pipeline;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var config = builder.Configuration;
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,8 +41,13 @@ builder.Services.AddCors(options =>
           });
 });
 
+builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
+{
+    var configuration = ConfigurationOptions.Parse(config.GetConnectionString("Redis"), true);
+    return ConnectionMultiplexer.Connect(configuration);
+});
 
-var config = builder.Configuration;
+
 var mongoDbContext = new MongoDbContext(config.GetSection("Mongosettings:Connection").Value, config.GetSection("Mongosettings:DatabaseName").Value);
 
 builder.Services.AddIdentity<TelemedicineAppUser, TelemedicineAppRole>()
@@ -47,6 +57,9 @@ builder.Services.AddIdentity<TelemedicineAppUser, TelemedicineAppRole>()
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IOtpService, OtpService>();
+builder.Services.AddTransient<IKeyStore, KeyStore>();
+builder.Services.AddTransient<ISmsService, SmsService>();
 builder.Services.AddTransient<TestServices>();
 builder.Services.AddTransient<IUserManagerServices, UserManagerServices>();
 builder.Services.AddTransient<IFileStorgaeCommunicationService, FileStorgaeCommunicationService>();

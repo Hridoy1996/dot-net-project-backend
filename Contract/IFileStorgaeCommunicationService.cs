@@ -5,7 +5,8 @@ namespace Contract
 {
     public interface IFileStorgaeCommunicationService
     {
-        public bool UploadFile(FileUploadCommand command);
-        public void GetFile(FileUploadCommand command);
+        bool UploadFile(FileUploadCommand command);
+        void GetFile(FileUploadCommand command);
+        Task DeleteFileAsync(string fileId);
     }
 }

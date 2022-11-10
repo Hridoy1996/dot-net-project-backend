@@ -93,5 +93,17 @@ namespace Infrastructure.Core.Services.Storage
                 _logger.LogError($"Error in FileStorgaeCommunicationService class, Upload methid \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
             }
         }
+
+      public async Task DeleteFileAsync(string fileId)
+        {
+            AmazonS3Client? s3Client = new(new BasicAWSCredentials(AccessKey, AccessKeySecret), new AmazonS3Config
+            {
+                ServiceURL = S3LoginRoot,
+                Timeout = TimeSpan.FromSeconds(TIMEOUT),
+                MaxErrorRetry = 8,
+            });
+
+            await s3Client.DeleteObjectAsync(new Amazon.S3.Model.DeleteObjectRequest() { BucketName = S3BucketName, Key = $"{S3FolderName}/{fileId}" });
+        }
     }
 }

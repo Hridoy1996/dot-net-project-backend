@@ -23,9 +23,11 @@ namespace TeleMedicine_WebService.Controllers
         }
 
         [HttpPost]
-        public async Task ProcessOtp([FromBody] OtpRequestCommand command)
+        public async Task<CommonResponseModel> ProcessOtp([FromBody] OtpRequestCommand command)
         {
              await _mediator.Send(command);
+
+            return new CommonResponseModel { IsSucceed = true, StatusCode = (int)HttpStatusCode.OK, ResponseMessage = "otp sent" };
         }
         
         [HttpPost]

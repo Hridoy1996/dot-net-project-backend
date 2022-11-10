@@ -29,7 +29,7 @@ namespace CommandHandlers.Sms
 
             var addOtpKeyTask = _keyStore.AddKeyWithExpiryAsync($"TelemedicineOtp_{request.MobileNumber}", hashedOtp, (1000 * 60 * 2) + (1000 * 30));
 
-            string otpMessage = $"Your OTP  is {request.Otp}. Don't share it with anybody!";
+            string otpMessage = $"Your OTP is {request.Otp}. Don't share it with anybody!";
             await _smsService.SendTextMessageAsync(otpMessage, request.MobileNumber);
 
             await addOtpKeyTask;

@@ -27,7 +27,7 @@ namespace CommandHandlers.Sms
                 return;
             }
 
-            var addOtpKeyTask = _keyStore.AddKeyWithExpiryAsync($"TelemedicineOtp_{request.MobileNumber}", hashedOtp, 1000 * 60 * 5);
+            var addOtpKeyTask = _keyStore.AddKeyWithExpiryAsync($"TelemedicineOtp_{request.MobileNumber}", hashedOtp, (1000 * 60 * 2) + (1000 * 30));
 
             await _smsService.SendTextMessageAsync(request.Otp, request.MobileNumber);
 

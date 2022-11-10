@@ -8,7 +8,6 @@ using System.Net;
 namespace CommandHandlers.Storage
 {
     public class FileUploadCommandHandler : IRequestHandler<FileUploadCommand, CommonResponseModel>
-    // public class FileUploadCommandHandler : AsyncRequestHandler<FileUploadCommand>
     {
         private readonly IMapper _mapper;
         private readonly IFileStorgaeCommunicationService _fileStorgaeCommunicationService;

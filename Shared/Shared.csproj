@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Bson" Version="2.17.1" />
+    <Compile Remove="Constants\**" />
+    <EmbeddedResource Remove="Constants\**" />
+    <None Remove="Constants\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Constants\" />
+    <PackageReference Include="MongoDB.Bson" Version="2.17.1" />
   </ItemGroup>
 
 </Project>

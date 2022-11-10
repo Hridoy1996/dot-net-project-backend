@@ -1,0 +1,12 @@
+﻿using MediatR;
+using Shared.Models;
+
+namespace Commands.SMS
+{
+    public class OtpVerificationCommand : IRequest<CommonResponseModel>
+    {
+        public string? MobileNumber { get; set; }
+        public string? Role { get; set; }
+        public string? Otp { get; set; }
+    }
+}

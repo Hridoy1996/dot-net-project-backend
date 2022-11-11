@@ -5,6 +5,7 @@ using Domains.Entities;
 using Domains.Mappers;
 using Infrastructure.Core.Caching;
 using Infrastructure.Core.Managers;
+using Infrastructure.Core.Repository;
 using Infrastructure.Core.Services;
 using Infrastructure.Core.Services.Storage;
 using Infrastructure.Core.Services.Test;
@@ -12,8 +13,10 @@ using Infrastructure.Core.SmsService;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MongoDbGenericRepository;
+using Shared.DbEntities.MongoDB;
 using StackExchange.Redis;
 using TeleMedicine_WebService.Pipeline;
 
@@ -41,16 +44,19 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
     return ConnectionMultiplexer.Connect(configuration);
 });
 
-
-var mongoDbContext = new MongoDbContext(config.GetSection("Mongosettings:Connection").Value, config.GetSection("Mongosettings:DatabaseName").Value);
+var mongoDbContext = new MongoDbContext(config.GetSection("MongoSettings:Connection").Value, config.GetSection("MongoSettings:DatabaseName").Value);
 
 builder.Services.AddIdentity<TelemedicineAppUser, TelemedicineAppRole>()
   .AddMongoDbStores<IMongoDbContext>(mongoDbContext)
   .AddDefaultTokenProviders();
 
+builder.Services.Configure<MongoSettings>(config.GetSection("MongoSettings"));
+
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IFileManagerService, FileManagerService>();
+builder.Services.AddTransient<IMongoTeleMedicineDBContext, MongoTeleMedicineDBContext>();
 builder.Services.AddTransient<IOtpService, OtpService>();
 builder.Services.AddTransient<IKeyStore, KeyStore>();
 builder.Services.AddTransient<ISmsService, SmsService>();

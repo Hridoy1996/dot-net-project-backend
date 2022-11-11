@@ -10,13 +10,16 @@ namespace CommandHandlers.Storage
     public class FileUploadCommandHandler : IRequestHandler<FileUploadCommand, CommonResponseModel>
     {
         private readonly IMapper _mapper;
+        private readonly IFileManagerService _fileManagerService;
         private readonly IFileStorgaeCommunicationService _fileStorgaeCommunicationService;
 
         public FileUploadCommandHandler(
             IMapper mapper,
+            IFileManagerService fileManagerService,
             IFileStorgaeCommunicationService fileStorgaeCommunicationService)
         {
             _mapper = mapper;
+            this._fileManagerService = fileManagerService;
             _fileStorgaeCommunicationService = fileStorgaeCommunicationService;
         }
 
@@ -29,7 +32,7 @@ namespace CommandHandlers.Storage
                 
                 if (isUploaded)
                 {
-                    await Task.Delay(0);
+                    await _fileManagerService.SaveFileAsync(request);
 
                     return new CommonResponseModel
                     {

@@ -1,5 +1,6 @@
 ﻿using Commands.Storage;
 using Contract;
+using Domains.ResponseDataModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
@@ -13,15 +14,18 @@ namespace TeleMedicine_WebService.Controllers
     {
         private readonly ILogger<StorageServiceController> _logger;
         private readonly IMediator _mediator;
+        private readonly IFileManagerService _fileManagerService;
         private readonly IFileStorgaeCommunicationService _fileStorgaeCommunicationService;
 
         public StorageServiceController(
             ILogger<StorageServiceController> logger, 
             IMediator mediator,
+            IFileManagerService fileManagerService,
             IFileStorgaeCommunicationService fileStorgaeCommunicationService)
         {
             _logger = logger;
             _mediator = mediator;
+            _fileManagerService = fileManagerService;
             _fileStorgaeCommunicationService = fileStorgaeCommunicationService;
         }
 
@@ -32,14 +36,32 @@ namespace TeleMedicine_WebService.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetFile([FromBody] FileUploadCommand command)
+        public async Task<CommonResponseModel> GetFile(string fileId)
         {
-            _mediator.Send(command);
+            try
+            {
+                var base64 = await _fileStorgaeCommunicationService.GetFileAsBase64(fileId);
+                var fileResponse = await _fileManagerService.GetFileAsync(fileId);
 
-            return Ok();
+                fileResponse.Base64 =  base64;
+
+                return new CommonResponseModel
+                {
+                    IsSucceed = true,
+                    StatusCode = (int)HttpStatusCode.OK,
+                    ResponseMessage = "file fetched!",
+                    ResponseData = fileResponse
+                };
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in GetFile method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, ResponseMessage = "server error", StatusCode = (int)HttpStatusCode.InternalServerError };
+            }
 
         }
-        
+
         [HttpDelete]
         public async Task<CommonResponseModel> DeleteFile(string fileId)
         {
@@ -51,7 +73,7 @@ namespace TeleMedicine_WebService.Controllers
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Error DeleteFile methid \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+                _logger.LogError($"Error in DeleteFile method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = "server error", StatusCode = (int)HttpStatusCode.InternalServerError };
             }

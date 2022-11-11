@@ -1,12 +1,19 @@
 ﻿using Amazon.Runtime;
 using Amazon.Runtime.Internal.Util;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Commands.Storage;
 using Contract;
+using Conversions.FileConversions;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Models;
 using System;
+using System.Net;
+using System.Security.AccessControl;
+using XAct.Messages;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Infrastructure.Core.Services.Storage
 {
@@ -41,13 +48,17 @@ namespace Infrastructure.Core.Services.Storage
                 byte[] bytes = System.Convert.FromBase64String(command?.Base64 ?? "");
 
                 TransferUtility fileTransferUtility = new(s3Client);
+                
+                var fileExtension = Path.GetExtension(command?.FileName);
+
+                var contentType = FileMappings.GetContentType(fileExtension);
 
                 TransferUtilityUploadRequest? fileTransferUtilityRequest = new()
                 {
                     BucketName = S3BucketName + @"/" + S3FolderName,
                     Key = command?.FileId,
                     InputStream = new MemoryStream(bytes),
-                    ContentType = "application/pdf",
+                    ContentType = contentType,
                     StorageClass = S3StorageClass.StandardInfrequentAccess,
                     PartSize = 6291456,
                     CannedACL = S3CannedACL.PublicRead
@@ -65,7 +76,7 @@ namespace Infrastructure.Core.Services.Storage
             }
         }
 
-        public void GetFile(FileUploadCommand command)
+        public async Task<string> GetFileAsBase64(string fileId)
         {
             try
             {
@@ -73,37 +84,41 @@ namespace Infrastructure.Core.Services.Storage
                 {
                     ServiceURL = S3LoginRoot,
                     Timeout = TimeSpan.FromSeconds(TIMEOUT),
-                    MaxErrorRetry = 8,
+                    MaxErrorRetry = 15,
                 });
 
-                byte[] bytes = System.Convert.FromBase64String(command?.Base64 ?? "");
+                var response = await s3Client.GetObjectAsync(new GetObjectRequest { BucketName = S3BucketName + @"/" + S3FolderName, Key = fileId });
+                MemoryStream memoryStream = new MemoryStream();
 
-                TransferUtility fileTransferUtility = new(s3Client);
-
-                TransferUtilityDownloadRequest transferUtilityDownloadRequest = new()
+                using (Stream responseStream = response.ResponseStream)
                 {
-                    BucketName = S3BucketName + @"/" + S3FolderName,
-                    Key = command?.FileId
-                };
+                    responseStream.CopyTo(memoryStream);
+                }
 
-                fileTransferUtility.DownloadAsync(transferUtilityDownloadRequest);
+                byte[] bytes = memoryStream.ToArray();
+
+                return Convert.ToBase64String(bytes);
+               
             }
             catch (Exception exception)
             {
                 _logger.LogError($"Error in FileStorgaeCommunicationService class, Upload methid \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
             }
-        }
 
-      public async Task DeleteFileAsync(string fileId)
+            return null;
+        }
+        
+        public async Task DeleteFileAsync(string fileId)
         {
+           
             AmazonS3Client? s3Client = new(new BasicAWSCredentials(AccessKey, AccessKeySecret), new AmazonS3Config
             {
                 ServiceURL = S3LoginRoot,
                 Timeout = TimeSpan.FromSeconds(TIMEOUT),
-                MaxErrorRetry = 8,
+                MaxErrorRetry = 15,
             });
 
-            await s3Client.DeleteObjectAsync(new Amazon.S3.Model.DeleteObjectRequest() { BucketName = S3BucketName, Key = $"{S3FolderName}/{fileId}" });
+            await s3Client.DeleteObjectAsync(new Amazon.S3.Model.DeleteObjectRequest() { BucketName = S3BucketName + @"/" + S3FolderName, Key = fileId });
         }
     }
 }

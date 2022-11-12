@@ -35,7 +35,7 @@ namespace QueryHandler
 
                 if (isLoginVerified)
                 {
-                    var filter = Builders<TelemedicineAppUser>.Filter.Eq(x => x.Email, request.UserName.ToLower());
+                    var filter = Builders<TelemedicineAppUser>.Filter.Eq(x => x.UserName, request.UserName.ToLower());
                     var user = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineAppUser>($"ApplicationUsers").Find(filter).FirstOrDefaultAsync();
 
                     var token = _tokenService.CreateToken(user.PhoneNumber, user.Id, $"{user.FirstName} {user.FirstName}", user.Roles);

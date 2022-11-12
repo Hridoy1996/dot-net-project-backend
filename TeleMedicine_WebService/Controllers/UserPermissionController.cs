@@ -14,14 +14,14 @@ namespace TeleMedicine_WebService.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class UserPermissionController : ControllerBase
+    public class AppCatalogueController : ControllerBase
     {
-        private readonly ILogger<UserPermissionController> _logger;
+        private readonly ILogger<AppCatalogueController> _logger;
         private readonly IMediator _mediator;
 
         private readonly IUserPermissionManager _userPermissionManager;
 
-        public UserPermissionController(ILogger<UserPermissionController> logger,
+        public AppCatalogueController(ILogger<AppCatalogueController> logger,
             IMediator mediator,
             IUserPermissionManager userPermissionManager)
         {
@@ -33,7 +33,7 @@ namespace TeleMedicine_WebService.Controllers
 
         [HttpGet]
         [Authorize]
-        public CommonResponseModel GetFeatureRolePermissions()
+        public CommonResponseModel GetApps()
         {
             try
             {

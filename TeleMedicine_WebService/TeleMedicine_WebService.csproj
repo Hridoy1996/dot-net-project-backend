@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CommandHandlers\CommandHandlers.csproj" />
     <ProjectReference Include="..\Core\Infrastructure.Core.csproj" />
+    <ProjectReference Include="..\QueryHandler\QueryHandler.csproj" />
   </ItemGroup>
 
 </Project>

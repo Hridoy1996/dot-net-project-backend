@@ -18,11 +18,7 @@ namespace Domains.Mappers
                 )
                .ForMember(
                     dest => dest.UserName,
-                    opt => opt.MapFrom(src => src.Email)
-                )
-               .ForMember(
-                    dest => dest.UserName,
-                    opt => opt.MapFrom(src => src.Email)
+                    opt => opt.MapFrom(src => src.PhoneNumber)
                 );
            
            

@@ -1,19 +1,25 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
-using Domains.Entities;
+using Conversions.JsonConverters;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDbGenericRepository.Attributes;
+using System.Text.Json.Serialization;
 
 namespace Domains.Entities
 {
+    [BsonIgnoreExtraElements]
     [CollectionName("ApplicationUsers")]
     public class TelemedicineAppUser : MongoIdentityUser<string>
     {
+        
         public TelemedicineAppUser() : base()
         {
             DocumentIds = new List<string>();
             Specializations = new List<string>();
             HealthIssues = new List<string>();
             Roles = new List<string>();
-
         }
 
         public TelemedicineAppUser(string userName, string email) : base(userName, email)
@@ -43,7 +49,7 @@ namespace Domains.Entities
         public IEnumerable<string> DocumentIds { get; set; }
         public IEnumerable<string> Specializations { get; set; }
         public string? Gender { get; set; }
-        public DateOnly DOB { get; set; }
+        public DateTime DOB { get; set; }
         public FinancialServiceInfo? FinancialInfo { get; set; }
     }
 }

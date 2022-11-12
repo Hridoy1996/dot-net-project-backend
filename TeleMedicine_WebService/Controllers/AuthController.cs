@@ -30,7 +30,7 @@ namespace TeleMedicine_WebService.Controllers
         [HttpPost]
         public  dynamic CreateTokenAsync( )
         {
-            var response =  _tokenService.CreateTokenAsync("1790208848", "5c9471e9-2bfc-4bad-94a1-2edabcc15ec2", "Tareq Mahmud Hridoy",new List<string> { "doctor"});
+            var response =  _tokenService.CreateToken("1790208848", "5c9471e9-2bfc-4bad-94a1-2edabcc15ec2", "Tareq Mahmud Hridoy",new List<string> { "doctor"});
 
             return Ok(response);
         }

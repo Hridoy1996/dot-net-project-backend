@@ -1,11 +1,13 @@
 ﻿
 using Commands.Storage;
+using Shared.Models;
 
 namespace Contract
 {
     public interface IFileStorgaeCommunicationService
     {
-        public bool UploadFile(FileUploadCommand command);
-        public void GetFile(FileUploadCommand command);
+        bool UploadFile(FileUploadCommand command);
+        Task<string> GetFileAsBase64(string fileId);
+        Task DeleteFileAsync(string fileId);
     }
 }

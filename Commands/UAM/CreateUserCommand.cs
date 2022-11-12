@@ -1,11 +1,10 @@
-﻿using Conversions.JsonConverters;
-using MediatR;
-using System.Text.Json.Serialization;
+﻿using MediatR;
+using Shared.Models;
 
 namespace Commands.UAM
 {
 
-    public class CreateUserCommand : IRequest
+    public class CreateUserCommand : IRequest<CommonResponseModel>
     {
         public CreateUserCommand()
         {
@@ -20,14 +19,15 @@ namespace Commands.UAM
         public string? Address { get; set; }
         public string? Email { get; set; }
         public string Password { get; set; } = null!;
-        [JsonConverter(typeof(DateOnlyJsonConverter))]
-        public DateOnly DOB { get; set; }
+        // [JsonConverter(typeof(DateOnlyJsonConverter))]
+        public DateTime DOB { get; set; }
         public string? CountryName { get; set; }
         public string? ProfileImageId { get; set; }
         public DateTime UserCreationDate { get; set; }
         public string? DisplayName { get; set; }
         public string? OrganizationTitle { get; set; }
         public string? ItemId { get; set; }
+        public string? PhoneNumber { get; set; }
         public string? BusinessPhoneNumber { get; set; }
         public string? BusinessEmail { get; set; }
         public string? NidNumber { get; set; }
@@ -55,7 +55,7 @@ namespace Commands.UAM
 
     public class MobileFinancialServiceInfoCommand
     {
-        public int PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         public string? ServiceProvider { get; set; }
     }
 }

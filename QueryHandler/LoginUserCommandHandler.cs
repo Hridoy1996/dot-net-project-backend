@@ -1,23 +1,58 @@
-﻿
-using Contract;
+﻿using Contract;
+using Domains.Entities;
 using MediatR;
+using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using Queries.UAM;
+using Shared.Models;
+using System.Net;
 
 namespace QueryHandler
 {
-    //public class LoginUserHandler : IRequestHandler<LoginQuery, string>
-    //{
-    //    private IUserManagerServices _userManagerServices;
-    //    public LoginUserHandler(IUserManagerServices userManagerServices)
-    //    {
-    //        _userManagerServices = userManagerServices;
-    //    }
-    //    //protected override async Task Handle(LoginQuery request, CancellationToken cancellationToken)
-    //    //{
-    //    //    await _userManagerServices.Login(request.UserName, request.Password);
-           
-    //    //    return Task.CompletedTask;
-    //    //}
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, CommonResponseModel>
+    {
+        private IUserManagerServices _userManagerServices;
+        private readonly IMongoTeleMedicineDBContext _mongoTeleMedicineDBContext;
+        private readonly ITokenService _tokenService;
+        private readonly ILogger<LoginQueryHandler> _logger;
 
-    //}
+        public LoginQueryHandler(IUserManagerServices userManagerServices,
+            ILogger<LoginQueryHandler> logger,
+            IMongoTeleMedicineDBContext mongoTeleMedicineDBContext,
+            ITokenService tokenService)
+        {
+            _userManagerServices = userManagerServices;
+            _logger = logger;
+            _mongoTeleMedicineDBContext = mongoTeleMedicineDBContext;
+            _tokenService = tokenService;
+        }
+
+        public async Task<CommonResponseModel> Handle(LoginQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var isLoginVerified = await _userManagerServices.Login(request.UserName, request.Password);
+
+                if (isLoginVerified)
+                {
+                    var filter = Builders<TelemedicineAppUser>.Filter.Eq(x => x.Email, request.UserName.ToLower());
+                    var user = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineAppUser>($"ApplicationUsers").Find(filter).FirstOrDefaultAsync();
+
+                    var token = _tokenService.CreateToken(user.PhoneNumber, user.Id, $"{user.FirstName} {user.FirstName}", user.Roles);
+
+                    return new CommonResponseModel { IsSucceed = true, ResponseData = token, ResponseMessage = "login success", StatusCode = (int)HttpStatusCode.OK };
+                }
+                else
+                {
+                    return new CommonResponseModel { IsSucceed = false, ResponseMessage = "login failed", StatusCode = (int)HttpStatusCode.BadRequest };
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in LoginQueryHandler \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.InternalServerError, ResponseMessage = "server error" };
+            }
+        }
+    }
 }

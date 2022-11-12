@@ -36,7 +36,7 @@ namespace Infrastructure.Core.Managers
         {
             try
             {
-                var user = _userManager.Users.FirstOrDefault(x => x.NormalizedEmail == appUser.NormalizedEmail);
+                var user = _userManager.Users.FirstOrDefault(x => x.UserName == appUser.UserName);
 
                 if (user != null)
                 {

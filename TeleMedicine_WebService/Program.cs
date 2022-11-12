@@ -15,7 +15,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson.Serialization;
 using MongoDbGenericRepository;
+using Queries.UAM;
+using QueryHandler;
 using Shared.DbEntities.MongoDB;
 using StackExchange.Redis;
 using TeleMedicine_WebService.Pipeline;
@@ -29,15 +32,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(CreateUserCommand).Assembly, typeof(CreateUserCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(LoginQuery).Assembly, typeof(LoginQueryHandler).Assembly);
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins();
     });
 });
-
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
     var configuration = ConfigurationOptions.Parse(config.GetConnectionString("Redis"), true);
@@ -54,6 +57,7 @@ builder.Services.Configure<MongoSettings>(config.GetSection("MongoSettings"));
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
+
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IFileManagerService, FileManagerService>();
 builder.Services.AddTransient<IMongoTeleMedicineDBContext, MongoTeleMedicineDBContext>();
@@ -63,6 +67,7 @@ builder.Services.AddTransient<ISmsService, SmsService>();
 builder.Services.AddTransient<TestServices>();
 builder.Services.AddTransient<IUserManagerServices, UserManagerServices>();
 builder.Services.AddTransient<IFileStorgaeCommunicationService, FileStorgaeCommunicationService>();
+
 builder.Services.AddAuthentication(option =>
 {
     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

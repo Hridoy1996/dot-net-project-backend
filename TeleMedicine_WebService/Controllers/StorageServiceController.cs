@@ -59,7 +59,6 @@ namespace TeleMedicine_WebService.Controllers
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = "server error", StatusCode = (int)HttpStatusCode.InternalServerError };
             }
-
         }
 
         [HttpDelete]

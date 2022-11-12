@@ -20,7 +20,7 @@ namespace Infrastructure.Core.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:key"]));
         }
 
-        public string CreateTokenAsync(string phoneNumber, string userId, string displayName, List<string> roles)
+        public string CreateToken(string phoneNumber, string userId, string displayName, List<string> roles)
         { 
 
             var claims = new List<Claim>

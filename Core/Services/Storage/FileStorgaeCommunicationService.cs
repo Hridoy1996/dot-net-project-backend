@@ -1,5 +1,4 @@
 ﻿using Amazon.Runtime;
-using Amazon.Runtime.Internal.Util;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
@@ -7,13 +6,6 @@ using Commands.Storage;
 using Contract;
 using Conversions.FileConversions;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Shared.Models;
-using System;
-using System.Net;
-using System.Security.AccessControl;
-using XAct.Messages;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Infrastructure.Core.Services.Storage
 {
@@ -48,7 +40,7 @@ namespace Infrastructure.Core.Services.Storage
                 byte[] bytes = System.Convert.FromBase64String(command?.Base64 ?? "");
 
                 TransferUtility fileTransferUtility = new(s3Client);
-                
+
                 var fileExtension = Path.GetExtension(command?.FileName);
 
                 var contentType = FileMappings.GetContentType(fileExtension);
@@ -98,7 +90,7 @@ namespace Infrastructure.Core.Services.Storage
                 byte[] bytes = memoryStream.ToArray();
 
                 return Convert.ToBase64String(bytes);
-               
+
             }
             catch (Exception exception)
             {
@@ -107,10 +99,10 @@ namespace Infrastructure.Core.Services.Storage
 
             return null;
         }
-        
+
         public async Task DeleteFileAsync(string fileId)
         {
-           
+
             AmazonS3Client? s3Client = new(new BasicAWSCredentials(AccessKey, AccessKeySecret), new AmazonS3Config
             {
                 ServiceURL = S3LoginRoot,

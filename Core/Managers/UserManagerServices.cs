@@ -2,6 +2,9 @@
 using Contract;
 using Domains.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
+using Shared.Models;
 
 namespace Infrastructure.Core.Managers
 {
@@ -9,20 +12,22 @@ namespace Infrastructure.Core.Managers
     {
         private readonly UserManager<TelemedicineAppUser> _userManager;
         private readonly SignInManager<TelemedicineAppUser> _signInManager;
+        private readonly ILogger<UserManagerServices> _logger;
 
         public UserManagerServices(
-             UserManager<TelemedicineAppUser> userManager
-             , SignInManager<TelemedicineAppUser> signInManager)
+             UserManager<TelemedicineAppUser> userManager,
+             ILogger<UserManagerServices> logger,
+             SignInManager<TelemedicineAppUser> signInManager)
         {
+            _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
         public async Task<bool> Login(string userName, string password = "") 
         {
-            var user = _userManager.Users.FirstOrDefault(x => x.UserName == userName) ?? new TelemedicineAppUser();
 
-            var result = await _signInManager.PasswordSignInAsync(userName, password, false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(userName, password,false,false);
 
             return result.Succeeded;
         }
@@ -42,8 +47,10 @@ namespace Infrastructure.Core.Managers
 
                 return result.Succeeded;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                _logger.LogError($"Error in RegisterUserAsync \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
                 return false;
             }
         }

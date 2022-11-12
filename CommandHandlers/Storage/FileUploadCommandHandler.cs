@@ -19,7 +19,7 @@ namespace CommandHandlers.Storage
             IFileStorgaeCommunicationService fileStorgaeCommunicationService)
         {
             _mapper = mapper;
-            this._fileManagerService = fileManagerService;
+            _fileManagerService = fileManagerService;
             _fileStorgaeCommunicationService = fileStorgaeCommunicationService;
         }
 
@@ -27,7 +27,6 @@ namespace CommandHandlers.Storage
         {
             try
             {
-                
                 var isUploaded = _fileStorgaeCommunicationService.UploadFile(request);
                 
                 if (isUploaded)

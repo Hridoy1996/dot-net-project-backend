@@ -72,6 +72,7 @@ builder.Services.AddTransient<IKeyStore, KeyStore>();
 builder.Services.AddTransient<ISmsService, SmsService>();
 builder.Services.AddTransient<TestServices>();
 builder.Services.AddTransient<IUserManagerServices, UserManagerServices>();
+builder.Services.AddTransient<IUserPermissionManager, UserPermissionManager>();
 builder.Services.AddTransient<IFileStorgaeCommunicationService, FileStorgaeCommunicationService>();
 
 builder.Services.AddAuthentication(option =>

@@ -22,10 +22,9 @@ namespace Infrastructure.Core.Services
 
         public string CreateToken(string phoneNumber, string userId, string displayName, List<string> roles)
         { 
-
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.HomePhone, phoneNumber),
+                new Claim("UserName", phoneNumber),
                 new Claim("UserId", userId),
                 new Claim(ClaimTypes.GivenName, displayName),
                 new Claim("Roles", JsonConvert.SerializeObject(roles)),

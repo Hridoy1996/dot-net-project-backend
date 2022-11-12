@@ -1,9 +1,11 @@
 ﻿using Commands.UAM;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Queries.UAM;
 using Shared.Models;
 using System.Net;
+using System.Security.Claims;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -40,7 +42,7 @@ namespace TeleMedicine_WebService.Controllers
         {
             try
             {
-                return (CommonResponseModel) await _mediator.Send(command);
+                return (CommonResponseModel)await _mediator.Send(command);
             }
             catch (Exception exception)
             {
@@ -49,6 +51,24 @@ namespace TeleMedicine_WebService.Controllers
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
-        }
+        //[HttpPost]
+        //[Authorize]
+        //public async Task<CommonResponseModel> GetLoginUser([FromBody] LoginQuery command)
+        //{
+        //    try
+        //    {
+        //        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //     }
+        //    catch (Exception exception)
+        //    {
+        //        _logger.LogError($"Error in LoginAsync method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+        //            } 
+        //    return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
+       
+        //}
     }
+ 
+}
+   
 

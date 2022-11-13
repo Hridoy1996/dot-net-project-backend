@@ -3,7 +3,6 @@ using Shared.Models;
 
 namespace Commands.UAM
 {
-
     public class CreateUserCommand : IRequest<CommonResponseModel>
     {
         public CreateUserCommand()
@@ -11,6 +10,7 @@ namespace Commands.UAM
             Roles = new List<string>();
             DocumentIds = new List<string>();
             Specializations = new List<string>();
+            HelthIssues = new List<string>();
         }
 
         public string? Gender { get; set; }
@@ -24,14 +24,18 @@ namespace Commands.UAM
         public string? CountryName { get; set; }
         public string? ProfileImageId { get; set; }
         public DateTime UserCreationDate { get; set; }
-        public string? DisplayName { get; set; }
         public string? OrganizationTitle { get; set; }
         public string? ItemId { get; set; }
         public string? PhoneNumber { get; set; }
+        public float? HeightInCm { get; set; }
+        public string? MaritalStatus { get; set; }
+        public float? WeightInKg { get; set; }
+        public string? BloodGroup { get; set; }
         public string? BusinessPhoneNumber { get; set; }
         public string? BusinessEmail { get; set; }
         public string? NidNumber { get; set; }
         public IEnumerable<string> DocumentIds { get; set; }
+        public IEnumerable<string> HelthIssues { get; set; }
         public IEnumerable<string> Specializations { get; set; }
         public IEnumerable<string> Roles { get; set; }
         public FinancialServiceInfoCommand? FinancialInfo { get; set; }

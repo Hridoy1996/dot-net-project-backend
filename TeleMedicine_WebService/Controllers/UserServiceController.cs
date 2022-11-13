@@ -1,4 +1,5 @@
 ﻿using Commands.UAM;
+using Contract;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,15 @@ namespace TeleMedicine_WebService.Controllers
     {
         private readonly ILogger<UserServiceController> _logger;
         private readonly IMediator _mediator;
+        private readonly IUserManagerServices _userManagerServices;
 
-        public UserServiceController(ILogger<UserServiceController> logger, IMediator mediator)
+        public UserServiceController(ILogger<UserServiceController> logger,
+            IMediator mediator,
+            IUserManagerServices userManagerServices)
         {
             _logger = logger;
             _mediator = mediator;
+            _userManagerServices = userManagerServices;
         }
 
         [HttpPost]
@@ -51,24 +56,33 @@ namespace TeleMedicine_WebService.Controllers
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
-        //[HttpPost]
-        //[Authorize]
-        //public async Task<CommonResponseModel> GetLoginUser([FromBody] LoginQuery command)
-        //{
-        //    try
-        //    {
-        //        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //     }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError($"Error in LoginAsync method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
-        //            } 
-        //    return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
-       
-        //}
+        [HttpGet]
+        [Authorize]
+        public async Task<CommonResponseModel> GetUser(string userName)
+        {
+            try
+            {
+                var userData = await _userManagerServices.GetUserAsync(userName);
+
+                if (userData == null)
+                {
+                    return new CommonResponseModel { IsSucceed = true, ResponseMessage = "User Not Found", StatusCode = (int)HttpStatusCode.NoContent };
+                }
+                else
+                {
+                    return new CommonResponseModel { IsSucceed = true, ResponseMessage = "User Found", StatusCode = (int)HttpStatusCode.NoContent, ResponseData = userData };
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in LoginAsync method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, ResponseData = "ServerError", StatusCode = (int)HttpStatusCode.InternalServerError };
+            }
+        }
     }
- 
+
 }
    
 

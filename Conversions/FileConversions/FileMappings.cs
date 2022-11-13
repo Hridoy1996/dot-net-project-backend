@@ -19,6 +19,9 @@
                     {"jpg", "image/jpeg"},
                     {"png", "image/png"},
                     {"txt", "text/plain"}
+            //csv
+            //mp4
+            //mp3
                 };
     }
 }

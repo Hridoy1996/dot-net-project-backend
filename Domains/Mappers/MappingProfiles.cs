@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Commands.UAM;
 using Domains.Entities;
+using Domains.ResponseDataModels;
 
 namespace Domains.Mappers
 {
@@ -20,6 +21,7 @@ namespace Domains.Mappers
                     dest => dest.UserName,
                     opt => opt.MapFrom(src => src.PhoneNumber)
                 );
+            CreateMap<TelemedicineAppUser, UserDataResponse>();
            
            
 

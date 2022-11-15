@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Commands.Service;
 using Commands.UAM;
 using Domains.Entities;
 using Domains.ResponseDataModels;
@@ -22,8 +23,12 @@ namespace Domains.Mappers
                     opt => opt.MapFrom(src => src.PhoneNumber)
                 );
             CreateMap<TelemedicineAppUser, UserDataResponse>();
-           
-           
+            CreateMap<AppointmentRequestCommand, TelemedicineService>()
+                .ForMember(
+                    dest => dest.ItemId,
+                    opt => opt.MapFrom(src => src.Id ?? Guid.NewGuid().ToString())
+                );
+
 
             //  public InfrastructureMappingProfile()
             //{

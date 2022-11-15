@@ -18,10 +18,10 @@
                     {"jpeg", "image/jpeg"},
                     {"jpg", "image/jpeg"},
                     {"png", "image/png"},
-                    {"txt", "text/plain"}
-            //csv
-            //mp4
-            //mp3
+                    {"txt", "text/plain"},
+                    {"csv", "text/csv"},
+                    {"mp3", "audio/mpeg"},
+                    {"mp4", "video/mp4"}
                 };
     }
 }

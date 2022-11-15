@@ -1,24 +1,23 @@
-﻿using Shared.DbEntities.Base;
+﻿using MediatR;
+using Shared.Models;
 
-namespace Domains.Entities
+namespace Commands.Service
 {
-    public class Service : BaseEntity
+    public class AppointmentRequestCommand : IRequest<CommonResponseModel>
     {
+        public AppointmentRequestCommand()
+        {
+            PatientData = new List<PatientData>();
+        }
+
+        public string? Id { get; set; }
         public string? ApplicantUserId { get; set; }
         public string? ApplicantUserName { get; set; }
         public string? ApplicantDisplayName { get; set; }
         public string? ServiceType { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public string? Status { get; set; }
         public string? ApplicantComment { get; set; }
-        public string? DoctorFeedbackId { get; set; }
-        public string? ServiceInitiationDate { get; set; }
-        public string? AssignedDoctorName { get; set; }
-        public string? AssignedDoctorUserId { get; set; }
         public List<PatientData>? PatientData { get; set; }
     }
-
     public class PatientData
     {
         public string? ApplicantDocumentId { get; set; }

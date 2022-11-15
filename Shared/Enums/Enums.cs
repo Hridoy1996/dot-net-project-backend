@@ -38,6 +38,26 @@ namespace Shared.Enums
         Nagad
     }
 
+    public enum AppointmentType
+    {
+        [BsonRepresentation(BsonType.String)]
+        Offline,
+        [BsonRepresentation(BsonType.String)]
+        SelfCheckup,
+        [BsonRepresentation(BsonType.String)]
+        Online
+    } 
+    
+    public enum AppointmentStatus
+    {
+        [BsonRepresentation(BsonType.String)]
+        Resolved,
+        [BsonRepresentation(BsonType.String)]
+        Ongoing,
+        [BsonRepresentation(BsonType.String)]
+        Upcoming
+    }
+
     public enum BloodGroup
     {
         OPositive,

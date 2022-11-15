@@ -7,6 +7,7 @@ using Infrastructure.Core.Caching;
 using Infrastructure.Core.Managers;
 using Infrastructure.Core.Repository;
 using Infrastructure.Core.Services;
+using Infrastructure.Core.Services.Service;
 using Infrastructure.Core.Services.Storage;
 using Infrastructure.Core.Services.Test;
 using Infrastructure.Core.SmsService;
@@ -74,6 +75,7 @@ builder.Services.AddTransient<TestServices>();
 builder.Services.AddTransient<IUserManagerServices, UserManagerServices>();
 builder.Services.AddTransient<IUserPermissionManager, UserPermissionManager>();
 builder.Services.AddTransient<IFileStorgaeCommunicationService, FileStorgaeCommunicationService>();
+builder.Services.AddTransient<IAppointmentManager, AppointmentManager>();
 
 builder.Services.AddAuthentication(option =>
 {

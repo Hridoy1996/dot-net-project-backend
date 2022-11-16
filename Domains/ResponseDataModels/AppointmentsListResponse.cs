@@ -10,7 +10,7 @@ namespace Domains.ResponseDataModels
         }
 
         public List<ApppointmentResponse> ApppointmentResponses { get; set; }
-        public int TotalCount { get; set; }    
+        public long TotalCount { get; set; }    
     }
 
     public class ApppointmentResponse

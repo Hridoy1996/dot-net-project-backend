@@ -47,7 +47,7 @@ namespace TeleMedicine_WebService.Controllers
 
         [HttpGet]
         [Authorize]
-        public CommonResponseModel GetAppointments(string? searchKey, string? status, string? type, int pageNumber = 0, int pageSize = 10)
+        public async Task<CommonResponseModel> GetAppointmentsAsync(string? searchKey, string? status, string? type, int pageNumber = 0, int pageSize = 10)
         {
             try
             {
@@ -61,9 +61,9 @@ namespace TeleMedicine_WebService.Controllers
                     loggedInDoctorId = String.Empty;
                 }
 
-                var appointments = _appointmentManager.GetAppointments(searchKey, status, type, loggedInDoctorId, pageNumber, pageSize);
+                var appointments = await _appointmentManager.GetAppointments(searchKey, status, type, loggedInDoctorId, pageNumber, pageSize);
 
-                if (appointments.Any())
+                if (appointments.TotalCount != 0)
                 {
                     return new CommonResponseModel { IsSucceed = true, ResponseMessage = "Data found!", ResponseData = appointments, StatusCode = (int)HttpStatusCode.OK };
                 }

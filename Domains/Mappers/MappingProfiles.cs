@@ -23,11 +23,21 @@ namespace Domains.Mappers
                     opt => opt.MapFrom(src => src.PhoneNumber)
                 );
             CreateMap<TelemedicineAppUser, UserDataResponse>();
+            CreateMap<Commands.Service.PatientData, Domains.Entities.PatientData>();
+            CreateMap<Commands.Service.SixInOneMonitorData, Domains.Entities.SixInOneMonitorData>();
+            CreateMap<Commands.Service.Otoscope, Domains.Entities.Otoscope>();
+            CreateMap<Commands.Service.Stethoscope, Domains.Entities.Stethoscope>();
             CreateMap<AppointmentRequestCommand, TelemedicineService>()
                 .ForMember(
                     dest => dest.ItemId,
                     opt => opt.MapFrom(src => src.Id ?? Guid.NewGuid().ToString())
                 );
+            CreateMap<Domains.Entities.PatientData, Domains.ResponseDataModels.PatientData>();
+            CreateMap<Domains.Entities.SixInOneMonitorData, Domains.ResponseDataModels.SixInOneMonitorData>();
+            CreateMap<Domains.Entities.Otoscope, Domains.ResponseDataModels.Otoscope>();
+            CreateMap<Domains.Entities.Stethoscope, Domains.ResponseDataModels.Stethoscope>();
+            CreateMap<TelemedicineService, AppointmentDetails>();
+               
 
 
             //  public InfrastructureMappingProfile()

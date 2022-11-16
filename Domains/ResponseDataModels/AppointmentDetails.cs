@@ -1,10 +1,10 @@
 ﻿using Shared.DbEntities.Base;
 
-namespace Domains.Entities
+namespace Domains.ResponseDataModels
 {
-    public class TelemedicineService : BaseEntity
+    public class AppointmentDetails
     {
-        public TelemedicineService()
+        public AppointmentDetails()
         {
             PatientFiles = new List<PatientData>();
             SixInOneMonitorData = new SixInOneMonitorData();
@@ -13,17 +13,12 @@ namespace Domains.Entities
         }
 
         public string? ApplicantUserId { get; set; }
-        public string? ApplicantUserName { get; set; }
         public string? ApplicantDisplayName { get; set; }
         public string? ServiceType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Status { get; set; }
         public string? ApplicantComment { get; set; }
-        public string? DoctorFeedbackId { get; set; }
-        public DateTime? ServiceInitiationDate { get; set; }
-        public string? AssignedDoctorName { get; set; }
-        public string? AssignedDoctorUserId { get; set; }
         public List<PatientData>? PatientFiles { get; set; }
         public SixInOneMonitorData SixInOneMonitorData { get; set; }
         public Stethoscope Stethoscope { get; set; }
@@ -62,3 +57,4 @@ namespace Domains.Entities
         public string? OtoscopeVideoFileId { get; set; }
     }
 }
+

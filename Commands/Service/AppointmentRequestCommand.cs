@@ -7,7 +7,10 @@ namespace Commands.Service
     {
         public AppointmentRequestCommand()
         {
-            PatientData = new List<PatientData>();
+            PatientFiles = new List<PatientData>();
+            SixInOneMonitorData = new SixInOneMonitorData();
+            Stethoscope = new Stethoscope();
+            Otoscope = new Otoscope();
         }
 
         public string? Id { get; set; }
@@ -16,11 +19,40 @@ namespace Commands.Service
         public string? ApplicantDisplayName { get; set; }
         public string? ServiceType { get; set; }
         public string? ApplicantComment { get; set; }
-        public List<PatientData>? PatientData { get; set; }
+        public List<PatientData>? PatientFiles { get; set; }
+        public SixInOneMonitorData SixInOneMonitorData { get; set; }
+        public Stethoscope Stethoscope { get; set; }
+        public Otoscope Otoscope { get; set; }
     }
     public class PatientData
     {
         public string? ApplicantDocumentId { get; set; }
         public List<string>? Tags { get; set; }
+    }
+    
+    public class SixInOneMonitorData
+    {
+        public string? EcgFileName { get; set; }
+        public string? EcgFileId { get; set; }
+        public float SpO2 { get; set; }
+        public float Temerature { get; set; }
+        public float BloodPressureLow { get; set; }
+        public float BloodPressureHigh { get; set; }
+        public float HeartRate { get; set; }
+        public float GlucoseMonitoring { get; set; }
+    }
+
+    public class Stethoscope
+    {
+        public string? HeartSoundFileName { get; set; }
+        public string? HeartSoundFileId { get; set; }
+        public string? LungSoundFileName { get; set; }
+        public string? LungSoundFileId { get; set; }
+    }
+
+    public class Otoscope
+    {
+        public string? OtoscopeVideoFileName { get; set; }
+        public string? OtoscopeVideoFileId { get; set; }
     }
 }

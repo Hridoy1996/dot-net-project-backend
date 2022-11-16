@@ -1,4 +1,6 @@
-﻿using Contract;
+﻿using Amazon.S3.Model;
+using AutoMapper;
+using Contract;
 using Domains.Entities;
 using Domains.ResponseDataModels;
 using MongoDB.Bson;
@@ -11,10 +13,32 @@ namespace Infrastructure.Core.Services.Service
     public class AppointmentManager : IAppointmentManager
     {
         private readonly IMongoTeleMedicineDBContext _mongoTeleMedicineDBContext;
-      
-        public AppointmentManager(IMongoTeleMedicineDBContext mongoTeleMedicineDBContext)
+        private readonly IMapper _mapper;
+
+        public AppointmentManager(IMongoTeleMedicineDBContext mongoTeleMedicineDBContext, IMapper mapper)
         {
             _mongoTeleMedicineDBContext = mongoTeleMedicineDBContext;
+            _mapper = mapper;
+        }
+
+        public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync()
+        {
+            var filter = Builders<TelemedicineService>.Filter.Ne(x => x.Status, nameof(AppointmentStatus.Resolved));
+            
+
+            var apppointmentFulent = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                .Find(filter);
+
+            var appointment = await apppointmentFulent.SortByDescending(x => x.ServiceInitiationDate).FirstOrDefaultAsync();
+         
+            if(appointment == null)
+            {
+                return null;
+            }
+
+            var appointmentDetails = _mapper.Map<AppointmentDetails>(appointment);
+
+            return appointmentDetails;
         }
 
         public async Task<AppointmentsListResponse> GetAppointments(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)

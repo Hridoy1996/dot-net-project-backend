@@ -74,7 +74,7 @@ namespace TeleMedicine_WebService.Controllers
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Error in PlaceServiceAsync method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+                _logger.LogError($"Error in GetAppointmentsAsync method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
             }
@@ -99,7 +99,7 @@ namespace TeleMedicine_WebService.Controllers
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Error in PlaceServiceAsync method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+                _logger.LogError($"Error in GetLatestAppointmentDetails method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
             }

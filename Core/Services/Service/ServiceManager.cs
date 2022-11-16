@@ -17,7 +17,7 @@ namespace Infrastructure.Core.Services.Service
             _mongoTeleMedicineDBContext = mongoTeleMedicineDBContext;
         }
 
-        public List<AppointmentsListResponse> GetAppointments(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)
+        public async Task<AppointmentsListResponse> GetAppointments(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)
         {
             var filter = Builders<TelemedicineService>.Filter.Empty;
 
@@ -38,13 +38,17 @@ namespace Infrastructure.Core.Services.Service
                 filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorUserId);
             }
 
-            var result = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+            var totalCount = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                        .Find(filter)
+                        .CountDocumentsAsync();
+
+            var apppointments = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                         .Find(filter)
                         .Skip(page * size)
                         .Limit(size)
                         .ToList()
                         .Select(x =>
-                            new AppointmentsListResponse
+                            new ApppointmentResponse
                             {
                                 ApplicantDisplayName = x.ApplicantDisplayName,
                                 Id = x.ItemId,
@@ -55,7 +59,7 @@ namespace Infrastructure.Core.Services.Service
                             })
                         .ToList();
 
-            return result;
+            return new AppointmentsListResponse { ApppointmentResponses = apppointments, TotalCount = await totalCount };
         }
 
         public async Task<bool> PlaceAppointmentAsync(TelemedicineService user)

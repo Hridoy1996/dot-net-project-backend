@@ -7,6 +7,7 @@
             DocumentIds = new List<string>();
             Specializations = new List<string>();
             HelthIssues = new List<string>();
+            Roles = new List<string>();
         }
         public string? Gender { get; set; }
         public string? FirstName { get; set; }
@@ -27,6 +28,7 @@
         public string? BusinessEmail { get; set; }
         public string? NidNumber { get; set; }
         public IEnumerable<string> DocumentIds { get; set; }
+        public IEnumerable<string> Roles { get; set; }
         public IEnumerable<string> HelthIssues { get; set; }
         public IEnumerable<string> Specializations { get; set; }
     }

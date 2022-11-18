@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Commands.Service;
+using Commands.Test;
 using Commands.UAM;
 using Domains.Entities;
 using Domains.ResponseDataModels;
@@ -22,6 +23,7 @@ namespace Domains.Mappers
                     dest => dest.UserName,
                     opt => opt.MapFrom(src => src.PhoneNumber)
                 );
+
             CreateMap<TelemedicineAppUser, UserDataResponse>();
             CreateMap<Commands.Service.PatientData, Domains.Entities.PatientData>();
             CreateMap<Commands.Service.SixInOneMonitorData, Domains.Entities.SixInOneMonitorData>();
@@ -32,13 +34,17 @@ namespace Domains.Mappers
                     dest => dest.ItemId,
                     opt => opt.MapFrom(src => src.Id ?? Guid.NewGuid().ToString())
                 );
+
             CreateMap<Domains.Entities.PatientData, Domains.ResponseDataModels.PatientData>();
             CreateMap<Domains.Entities.SixInOneMonitorData, Domains.ResponseDataModels.SixInOneMonitorData>();
             CreateMap<Domains.Entities.Otoscope, Domains.ResponseDataModels.Otoscope>();
             CreateMap<Domains.Entities.Stethoscope, Domains.ResponseDataModels.Stethoscope>();
             CreateMap<TelemedicineService, AppointmentDetails>();
-               
-
+            CreateMap<FeatureRoleMapCreationCommand, FeatureRoleMap>()
+               .ForMember(
+                    dest => dest.ItemId,
+                    opt => opt.MapFrom(src => src.Id ?? Guid.NewGuid().ToString())
+                );
 
             //  public InfrastructureMappingProfile()
             //{

@@ -24,7 +24,12 @@ namespace Domains.Mappers
                     opt => opt.MapFrom(src => src.PhoneNumber)
                 );
 
-            CreateMap<TelemedicineAppUser, UserDataResponse>();
+            CreateMap<TelemedicineAppUser, UserDataResponse>()
+                .ForMember(
+                    dest => dest.ItemId,
+                    opt => opt.MapFrom(src => src.Id)
+                )
+
             CreateMap<Commands.Service.PatientData, Domains.Entities.PatientData>();
             CreateMap<Commands.Service.SixInOneMonitorData, Domains.Entities.SixInOneMonitorData>();
             CreateMap<Commands.Service.Otoscope, Domains.Entities.Otoscope>();

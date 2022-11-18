@@ -29,7 +29,7 @@ namespace Domains.Entities
             HealthIssues = new List<string>();
             Roles = new List<string>();
         }
-
+       
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? NidNumber { get; set; }

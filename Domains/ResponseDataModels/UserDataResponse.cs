@@ -6,13 +6,14 @@
         {
             DocumentIds = new List<string>();
             Specializations = new List<string>();
-            HelthIssues = new List<string>();
+            HealthIssues = new List<string>();
             Roles = new List<string>();
         }
         public string? Gender { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Address { get; set; }
+        public string? UserId { get; set; }
         public string? Email { get; set; }
         public DateTime DOB { get; set; }
         public string? CountryName { get; set; }
@@ -29,7 +30,7 @@
         public string? NidNumber { get; set; }
         public IEnumerable<string> DocumentIds { get; set; }
         public IEnumerable<string> Roles { get; set; }
-        public IEnumerable<string> HelthIssues { get; set; }
+        public IEnumerable<string> HealthIssues { get; set; }
         public IEnumerable<string> Specializations { get; set; }
     }
 }

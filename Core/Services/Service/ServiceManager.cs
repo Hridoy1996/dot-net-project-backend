@@ -1,12 +1,10 @@
-﻿using Amazon.S3.Model;
-using AutoMapper;
+﻿using AutoMapper;
 using Contract;
 using Domains.Entities;
 using Domains.ResponseDataModels;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Shared.Enums;
-using System;
 
 namespace Infrastructure.Core.Services.Service
 {
@@ -24,14 +22,14 @@ namespace Infrastructure.Core.Services.Service
         public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync()
         {
             var filter = Builders<TelemedicineService>.Filter.Ne(x => x.Status, nameof(AppointmentStatus.Resolved));
-            
+
 
             var apppointmentFulent = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                 .Find(filter);
 
             var appointment = await apppointmentFulent.SortByDescending(x => x.ServiceInitiationDate).FirstOrDefaultAsync();
-         
-            if(appointment == null)
+
+            if (appointment == null)
             {
                 return null;
             }
@@ -56,7 +54,7 @@ namespace Infrastructure.Core.Services.Service
             if (!string.IsNullOrEmpty(type))
             {
                 filter &= Builders<TelemedicineService>.Filter.Eq(x => x.ServiceType, type);
-            }  
+            }
             if (!string.IsNullOrEmpty(doctorUserId))
             {
                 filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorUserId);
@@ -98,11 +96,11 @@ namespace Infrastructure.Core.Services.Service
                     user.Status = nameof(AppointmentStatus.Ongoing);
                 }
 
-               await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").InsertOneAsync(user);
+                await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").InsertOneAsync(user);
 
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }

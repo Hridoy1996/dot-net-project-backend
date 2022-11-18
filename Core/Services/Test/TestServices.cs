@@ -3,11 +3,6 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using MongoDbGenericRepository;
 using Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Core.Services.Test
 {
@@ -18,7 +13,7 @@ namespace Infrastructure.Core.Services.Test
 
         public TestServices(ILogger<TestServices> logger, IMongoDbContext mongoDbContext)
         {
-             _logger = logger;
+            _logger = logger;
             _mongoDbContext = mongoDbContext;
         }
 

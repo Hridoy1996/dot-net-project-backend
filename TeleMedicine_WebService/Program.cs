@@ -76,6 +76,7 @@ builder.Services.AddTransient<IUserManagerServices, UserManagerServices>();
 builder.Services.AddTransient<IUserPermissionManager, UserPermissionManager>();
 builder.Services.AddTransient<IFileStorgaeCommunicationService, FileStorgaeCommunicationService>();
 builder.Services.AddTransient<IAppointmentManager, AppointmentManager>();
+builder.Services.AddTransient<IBackendScriptService, BackendScriptService>();
 
 builder.Services.AddAuthentication(option =>
 {

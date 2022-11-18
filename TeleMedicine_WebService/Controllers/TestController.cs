@@ -1,9 +1,12 @@
 ﻿using Commands.Storage;
+using Commands.Test;
 using Infrastructure.Core.Services.Test;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Queries;
+using Shared.Models;
+using System.Net;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -29,6 +32,22 @@ namespace TeleMedicine_WebService.Controllers
             var response = await _testServices.GetAnyDataAsync(query);
 
             return Ok(response);
+        }
+        
+        [HttpPost]
+        //[Authorize]
+        public async Task<CommonResponseModel> SaveFeatureRoleMap([FromBody] FeatureRoleMapCreationCommand command)
+        {
+            try
+            {
+                return (CommonResponseModel)await _mediator.Send(command);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in SaveFeatureRoleMap method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
+            }
         }
     }
 }

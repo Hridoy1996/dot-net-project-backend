@@ -5,6 +5,7 @@ using Infrastructure.Core.HelperService;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Queries.UAM;
 using Shared.Models;
 using System.Net;
@@ -46,6 +47,8 @@ namespace TeleMedicine_WebService.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError($"error in GetApps ${JsonConvert.SerializeObject(ex)}");
+
                 return new CommonResponseModel { IsSucceed = true, StatusCode = (int)HttpStatusCode.OK, ResponseMessage = "Server Error" };
             }
         }

@@ -28,7 +28,7 @@ namespace Domains.Mappers
                 .ForMember(
                     dest => dest.ItemId,
                     opt => opt.MapFrom(src => src.Id)
-                )
+                );
 
             CreateMap<Commands.Service.PatientData, Domains.Entities.PatientData>();
             CreateMap<Commands.Service.SixInOneMonitorData, Domains.Entities.SixInOneMonitorData>();

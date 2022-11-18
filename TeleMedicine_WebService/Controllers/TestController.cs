@@ -1,5 +1,6 @@
 ﻿using Commands.Storage;
 using Commands.Test;
+using Contract;
 using Infrastructure.Core.Services.Test;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -17,12 +18,14 @@ namespace TeleMedicine_WebService.Controllers
         private readonly ILogger<TestController> _logger;
         private readonly IMediator _mediator;
         private readonly TestServices _testServices;
+        private readonly IBackendScriptService _backendScriptService;
 
-        public TestController(ILogger<TestController> logger, IMediator mediator, TestServices testServices)
+        public TestController(ILogger<TestController> logger, IMediator mediator, TestServices testServices, IBackendScriptService backendScriptService)
         {
             _logger = logger;
             _mediator = mediator;
             _testServices = testServices;
+            _backendScriptService = backendScriptService;
         }
 
         [HttpPost]
@@ -30,6 +33,15 @@ namespace TeleMedicine_WebService.Controllers
         public async Task<dynamic> GetData([FromBody] GetDataQuery query)
         {
             var response = await _testServices.GetAnyDataAsync(query);
+
+            return Ok(response);
+        }  
+        
+        [HttpDelete]
+        [Authorize]
+        public async Task<dynamic> ClearCollectionAsync(string collectionName)
+        {
+            var response = await _backendScriptService.ClearCollectionAsync(collectionName);
 
             return Ok(response);
         }

@@ -2,6 +2,9 @@
 using Commands.Test;
 using Contract;
 using Domains.Entities;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using XAct.Users;
 
 namespace Infrastructure.Core.Services.Test
 {
@@ -23,6 +26,21 @@ namespace Infrastructure.Core.Services.Test
             {
                 var featureRoleMap = _mapper.Map<FeatureRoleMap>(command);
                 await _mongoTeleMedicineDBContext.GetCollection<FeatureRoleMap>($"{nameof(FeatureRoleMap)}s").InsertOneAsync(featureRoleMap);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        } 
+        
+        public async Task<bool> ClearCollectionAsync(string databaseName)
+        {
+            try
+            {
+                var filter = Builders<dynamic>.Filter.Empty;
+                await _mongoTeleMedicineDBContext.GetCollection<dynamic>($"{databaseName}s").DeleteManyAsync(filter);
 
                 return true;
             }

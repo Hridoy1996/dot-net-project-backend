@@ -86,7 +86,9 @@ namespace TeleMedicine_WebService.Controllers
         {
             try
             {
-                var appointment = await _appointmentManager.GetLatestAppointmentDetailsAsync(patientId);
+                var loggedInDoctorId = User.FindFirstValue("UserId");
+
+                var appointment = await _appointmentManager.GetLatestAppointmentDetailsAsync(patientId, loggedInDoctorId);
 
                 if (appointment != null)
                 {

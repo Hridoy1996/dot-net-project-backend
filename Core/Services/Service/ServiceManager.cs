@@ -19,10 +19,11 @@ namespace Infrastructure.Core.Services.Service
             _mapper = mapper;
         }
 
-        public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync(string patientId)
+        public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync(string patientId, string doctorId)
         {
             var filter = Builders<TelemedicineService>.Filter.Ne(x => x.Status, nameof(AppointmentStatus.Resolved));
             filter &= Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
+            filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorId);
 
             var apppointmentFulent = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                 .Find(filter);

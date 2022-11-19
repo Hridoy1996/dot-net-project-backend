@@ -82,11 +82,11 @@ namespace TeleMedicine_WebService.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<CommonResponseModel> GetLatestAppointmentDetails()
+        public async Task<CommonResponseModel> GetLatestAppointmentDetails(string patientId)
         {
             try
             {
-                var appointment = await _appointmentManager.GetLatestAppointmentDetailsAsync();
+                var appointment = await _appointmentManager.GetLatestAppointmentDetailsAsync(patientId);
 
                 if (appointment != null)
                 {

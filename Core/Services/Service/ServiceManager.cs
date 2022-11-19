@@ -19,10 +19,10 @@ namespace Infrastructure.Core.Services.Service
             _mapper = mapper;
         }
 
-        public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync()
+        public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync(string patientId)
         {
             var filter = Builders<TelemedicineService>.Filter.Ne(x => x.Status, nameof(AppointmentStatus.Resolved));
-
+            filter &= Builders<TelemedicineService>.Filter.Ne(x => x.ApplicantUserId, patientId);
 
             var apppointmentFulent = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                 .Find(filter);
@@ -72,6 +72,7 @@ namespace Infrastructure.Core.Services.Service
                         .Select(x =>
                             new ApppointmentResponse
                             {
+                                ApplicantUserId = x.ApplicantUserId,
                                 ApplicantDisplayName = x.ApplicantDisplayName,
                                 Id = x.ItemId,
                                 EndDate = x.EndDate == default ? String.Empty : x.EndDate.ToShortDateString(),

@@ -22,7 +22,7 @@ namespace Infrastructure.Core.Services.Service
         public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync(string patientId)
         {
             var filter = Builders<TelemedicineService>.Filter.Ne(x => x.Status, nameof(AppointmentStatus.Resolved));
-            filter &= Builders<TelemedicineService>.Filter.Ne(x => x.ApplicantUserId, patientId);
+            filter &= Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
 
             var apppointmentFulent = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                 .Find(filter);

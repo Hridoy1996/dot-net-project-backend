@@ -57,7 +57,7 @@ namespace Infrastructure.Core.Services.Service
             }
             if (!string.IsNullOrEmpty(doctorUserId))
             {
-                filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorUserId);
+                //filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorUserId);
             }
 
             var totalCount = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")

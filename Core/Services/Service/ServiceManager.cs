@@ -57,7 +57,7 @@ namespace Infrastructure.Core.Services.Service
             }
             if (!string.IsNullOrEmpty(doctorUserId))
             {
-                //filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorUserId);
+                filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorUserId);
             }
 
             var totalCount = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
@@ -84,19 +84,21 @@ namespace Infrastructure.Core.Services.Service
             return new AppointmentsListResponse { ApppointmentResponses = apppointments, TotalCount = await totalCount };
         }
 
-        public async Task<bool> PlaceAppointmentAsync(TelemedicineService user)
+        public async Task<bool> PlaceAppointmentAsync(TelemedicineService service)
         {
             try
             {
-                user.ServiceInitiationDate = DateTime.UtcNow;
+                service.ServiceInitiationDate = DateTime.UtcNow;
 
-                if (user.ServiceType == nameof(AppointmentType.Offline))
+                if (service.ServiceType == nameof(AppointmentType.Offline))
                 {
-                    user.StartDate = DateTime.UtcNow;
-                    user.Status = nameof(AppointmentStatus.Ongoing);
+                    service.StartDate = DateTime.UtcNow;
+                    service.Status = nameof(AppointmentStatus.Ongoing);
                 }
 
-                await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").InsertOneAsync(user);
+                service.AssignedDoctorUserId = "97689638-956c-4c09-b3b2-f835f74c9e57";
+
+                await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").InsertOneAsync(service);
 
                 return true;
             }

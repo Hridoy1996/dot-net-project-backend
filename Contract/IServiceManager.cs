@@ -5,8 +5,8 @@ namespace Contract
 {
     public interface IAppointmentManager
     {
-        Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync(string patientId, string doctorId);
-        Task<AppointmentsListResponse> GetAppointments(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10);
+        Task<AppointmentDetails?> GetAppointmentDetailsAsync(string appointmentId, string patientId, string doctorId);
+        Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10);
         Task<bool> PlaceAppointmentAsync(TelemedicineService user);
     }
 }

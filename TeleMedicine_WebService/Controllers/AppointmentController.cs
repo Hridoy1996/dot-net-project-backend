@@ -4,7 +4,6 @@ using Infrastructure.Core.HelperService;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using Shared.Models;
 using System.Net;
 using System.Security.Claims;

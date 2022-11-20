@@ -61,7 +61,7 @@ namespace TeleMedicine_WebService.Controllers
                     loggedInDoctorId = String.Empty;
                 }
 
-                var appointments = await _appointmentManager.GetAppointments(searchKey, status, type, loggedInDoctorId, pageNumber, pageSize);
+                var appointments = await _appointmentManager.GetAppointmentsAsync(searchKey, status, type, loggedInDoctorId, pageNumber, pageSize);
 
                 if (appointments.TotalCount != 0)
                 {
@@ -82,13 +82,13 @@ namespace TeleMedicine_WebService.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<CommonResponseModel> GetLatestAppointmentDetails(string patientId)
+        public async Task<CommonResponseModel> GetAppointmentDetails(string appointmentId, string patientId)
         {
             try
             {
                 var loggedInDoctorId = User.FindFirstValue("UserId");
 
-                var appointment = await _appointmentManager.GetLatestAppointmentDetailsAsync(patientId, loggedInDoctorId);
+                var appointment = await _appointmentManager.GetAppointmentDetailsAsync(appointmentId, patientId, loggedInDoctorId);
 
                 if (appointment != null)
                 {

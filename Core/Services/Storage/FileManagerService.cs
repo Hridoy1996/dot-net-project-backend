@@ -33,14 +33,39 @@ namespace Infrastructure.Core.Services.Storage
         {
             var filter = Builders<TelemedicineFile>.Filter.Eq(x=>x.ItemId, fileId);
 
-            var result = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineFile>($"{nameof(TelemedicineFile)}s").Find(filter).FirstOrDefaultAsync();
+            var result = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineFile>($"{nameof(TelemedicineFile)}s")
+                        .Find(filter)
+                        .FirstOrDefaultAsync();
 
             if(result is not null)
             {
-                return new FileDataResponse { FileId = fileId, FileName = result.Name };
+                var fileAndExtension = GetFileEntensiosizen(result.Name);
+
+                return new FileDataResponse 
+                { 
+                    FileName = fileAndExtension.Key, 
+                    Extension = fileAndExtension.Value,
+                    Url = $"https://dot-net-app-space.fra1.digitaloceanspaces.com/telemedicine/test/{fileId}"
+                };
             }
 
             return null;
+        }
+
+        KeyValuePair<string, string> GetFileEntensiosizen(string fileName)
+        {
+            var x = fileName.Split(".").ToList();
+
+            int size = x.Count();
+
+            string fileNameWithOutExtension = string.Empty;
+            
+            for (int i = 0; i < size - 1; i++)
+            {
+                fileNameWithOutExtension += x[i];
+            }
+
+            return new KeyValuePair<string, string>(fileNameWithOutExtension, x[size-1]);
         }
     }
 }

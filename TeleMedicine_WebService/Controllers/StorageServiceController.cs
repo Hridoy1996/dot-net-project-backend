@@ -40,10 +40,7 @@ namespace TeleMedicine_WebService.Controllers
         {
             try
             {
-                var base64 = await _fileStorgaeCommunicationService.GetFileAsBase64(fileId);
                 var fileResponse = await _fileManagerService.GetFileAsync(fileId);
-
-                fileResponse.Base64 =  base64;
 
                 return new CommonResponseModel
                 {

@@ -2,6 +2,7 @@
 using Contract;
 using Domains.Entities;
 using Domains.ResponseDataModels;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Shared.Enums;
@@ -12,36 +13,36 @@ namespace Infrastructure.Core.Services.Service
     {
         private readonly IMongoTeleMedicineDBContext _mongoTeleMedicineDBContext;
         private readonly IMapper _mapper;
-
-        public AppointmentManager(IMongoTeleMedicineDBContext mongoTeleMedicineDBContext, IMapper mapper)
+        private readonly ILogger<AppointmentManager> _logger;
+        public AppointmentManager(IMongoTeleMedicineDBContext mongoTeleMedicineDBContext, 
+            IMapper mapper,
+            ILogger<AppointmentManager> logger
+            )
         {
             _mongoTeleMedicineDBContext = mongoTeleMedicineDBContext;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<AppointmentDetails?> GetLatestAppointmentDetailsAsync(string patientId, string doctorId)
+        public async Task<AppointmentDetails?> GetAppointmentDetailsAsync(string appointmentId, string patientId, string doctorId)
         {
-            var filter = Builders<TelemedicineService>.Filter.Ne(x => x.Status, nameof(AppointmentStatus.Resolved));
-            filter &= Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
+            var filter =  Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
             filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorId);
+            filter &= Builders<TelemedicineService>.Filter.Eq(x => x.ItemId, appointmentId);
 
-            var apppointmentFulent = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
-                .Find(filter);
-
-            var appointment = await apppointmentFulent.SortByDescending(x => x.ServiceInitiationDate).FirstOrDefaultAsync();
-
-            if (appointment == null)
-            {
-                return null;
-            }
+            var appointment = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                .Find(filter)
+                .FirstOrDefaultAsync();
 
             var appointmentDetails = _mapper.Map<AppointmentDetails>(appointment);
 
             return appointmentDetails;
         }
 
-        public async Task<AppointmentsListResponse> GetAppointments(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)
+        public async Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)
         {
+            _logger.LogInformation($"In GetAppointments method: searchKey: {searchKey}, status: {status}, type: {type}, doctorUserId: { doctorUserId}");
+
             var filter = Builders<TelemedicineService>.Filter.Empty;
 
             if (!string.IsNullOrEmpty(searchKey))

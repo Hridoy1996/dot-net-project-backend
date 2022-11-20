@@ -21,7 +21,9 @@
             {".txt", "text/plain"},
             {".csv", "text/csv"},
             {".mp3", "audio/mpeg"},
-            {".mp4", "video/mp4"}
+            {".mp4", "video/mp4"},
+            {".wav", "audio/wav"},
+            {".pcm", "audio/wav"}
         };
     }
 }

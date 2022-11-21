@@ -40,8 +40,10 @@ namespace Domains.Entities
 
     public class SixInOneMonitorData
     {
-        public string? EcgFileName { get; set; }
-        public string? EcgFileId { get; set; }
+        public string? EcgCsvFileName { get; set; }
+        public string? EcgCsvFileId { get; set; } 
+        public string? EcgPdfFileName { get; set; }
+        public string? EcgPdfFileId { get; set; }
         public float SpO2 { get; set; }
         public float Temerature { get; set; }
         public float BloodPressureLow { get; set; }

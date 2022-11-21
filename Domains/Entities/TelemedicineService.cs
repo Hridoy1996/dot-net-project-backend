@@ -32,12 +32,14 @@ namespace Domains.Entities
         public Otoscope Otoscope { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class PatientData
     {
         public string? ApplicantDocumentId { get; set; }
         public List<string>? Tags { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class SixInOneMonitorData
     {
         public string? EcgCsvFileName { get; set; }
@@ -45,13 +47,14 @@ namespace Domains.Entities
         public string? EcgPdfFileName { get; set; }
         public string? EcgPdfFileId { get; set; }
         public float SpO2 { get; set; }
-        public float Temerature { get; set; }
+        public float Temperature { get; set; }
         public float BloodPressureLow { get; set; }
         public float BloodPressureHigh { get; set; }
         public float HeartRate { get; set; }
         public float GlucoseMonitoring { get; set; }
     }
 
+    [BsonIgnoreExtraElements]
     public class Stethoscope
     {
         public string? HeartSoundFileName { get; set; }

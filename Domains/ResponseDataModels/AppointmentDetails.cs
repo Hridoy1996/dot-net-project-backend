@@ -33,8 +33,6 @@ namespace Domains.ResponseDataModels
 
     public class SixInOneMonitorData
     {
-        public string? EcgCsvFileName { get; set; }
-        public string? EcgCsvFileId { get; set; }
         public string? EcgPdfFileName { get; set; }
         public string? EcgPdfFileId { get; set; }
         public float SpO2 { get; set; }

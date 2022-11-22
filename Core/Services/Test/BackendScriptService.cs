@@ -49,6 +49,22 @@ namespace Infrastructure.Core.Services.Test
                 return false;
             }
         }
+
+        public async Task<bool> DeleteAUserAsync(string userName)
+        {
+            try
+            {
+                var filter = Builders<TelemedicineAppUser>.Filter.Eq(x=>x.UserName, userName);
+
+                await _mongoTeleMedicineDBContext.GetCollection<TelemedicineAppUser>("ApplicationUsers").DeleteOneAsync(filter);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }
 

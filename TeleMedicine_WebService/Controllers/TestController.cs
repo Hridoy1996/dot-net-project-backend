@@ -44,6 +44,13 @@ namespace TeleMedicine_WebService.Controllers
             var response = await _backendScriptService.ClearCollectionAsync(collectionName);
 
             return Ok(response);
+        } 
+        
+        [HttpDelete]
+        [Authorize]
+        public async Task<dynamic> DeleteAUser(string userName)
+        {
+            return await _backendScriptService.DeleteAUserAsync(userName);
         }
         
         [HttpPost]

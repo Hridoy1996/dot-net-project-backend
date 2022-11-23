@@ -106,5 +106,32 @@ namespace TeleMedicine_WebService.Controllers
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<CommonResponseModel> GetAppointmentHistory(string? currentAppointmentId, string patientId, int pageNumber = 0, int pageSize = 5)
+        {
+            try
+            {
+                var loggedInDoctorId = User.FindFirstValue("UserId");
+
+                var appointment = await _appointmentManager.GetAppointmentHistoryAsync(currentAppointmentId, patientId, loggedInDoctorId, pageNumber, pageSize);
+
+                if (appointment != null)
+                {
+                    return new CommonResponseModel { IsSucceed = true, ResponseMessage = "Data found!", ResponseData = appointment, StatusCode = (int)HttpStatusCode.OK };
+                }
+                else
+                {
+                    return new CommonResponseModel { IsSucceed = true, ResponseMessage = "No data found!", StatusCode = (int)HttpStatusCode.NoContent };
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in GetLatestAppointmentDetails method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
+            }
+        }
     }
 }

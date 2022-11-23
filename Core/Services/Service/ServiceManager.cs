@@ -39,6 +39,31 @@ namespace Infrastructure.Core.Services.Service
             return appointmentDetails;
         }
 
+        public async Task<List<AppointmentDetails>> GetAppointmentHistoryAsync(string? currentAppointmentId, string patientId, string loggedInDoctorId, int pageNumber, int pageSize)
+        {
+            var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
+            filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, loggedInDoctorId);
+            filter &= Builders<TelemedicineService>.Filter.Ne(x => x.ItemId, currentAppointmentId);
+
+            var appointments = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                .Find(filter)
+                .SortByDescending(x => x.StartDate)
+                .Skip(pageSize * pageNumber)
+                .Limit(pageSize)
+                .ToListAsync();
+
+            var result = new List<AppointmentDetails>();
+
+            foreach (var appointment in appointments)
+            {
+                var appointmentDetails = _mapper.Map<AppointmentDetails>(appointment);
+
+                result.Add(appointmentDetails);
+            }
+
+            return result;
+        }
+
         public async Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)
         {
             _logger.LogInformation($"In GetAppointments method: searchKey: {searchKey}, status: {status}, type: {type}, doctorUserId: { doctorUserId}");

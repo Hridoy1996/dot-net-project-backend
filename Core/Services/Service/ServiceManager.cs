@@ -107,8 +107,10 @@ namespace Infrastructure.Core.Services.Service
                                 ApplicantUserId = x.ApplicantUserId,
                                 ApplicantDisplayName = x.ApplicantDisplayName,
                                 Id = x.ItemId,
-                                EndDate = x.EndDate.ToString(),
-                                StartDate = x.StartDate.ToString(),
+                                EndDate = x.EndDate == default ? String.Empty : x.EndDate.ToShortDateString(),
+                                StartDate = x.StartDate == default ? String.Empty : x.StartDate.ToShortDateString(),
+                                StartTime = x.StartDate == default ? String.Empty : x.StartDate.ToShortTimeString(),
+                                EndTime = x.EndDate == default ? String.Empty : x.EndDate.ToShortTimeString(),
                                 ServiceType = x.ServiceType,
                                 Status = x.Status,
                                 ServiceRequestDate = x.ServiceInitiationDate == default ? String.Empty : x.ServiceInitiationDate.ToShortDateString()

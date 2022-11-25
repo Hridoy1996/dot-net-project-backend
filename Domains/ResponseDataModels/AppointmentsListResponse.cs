@@ -23,5 +23,7 @@ namespace Domains.ResponseDataModels
         public string? EndDate { get; set; }
         public string? Status { get; set; }
         public string? ServiceRequestDate { get; set; }
+        public string? StartTime { get; set; }
+        public string? EndTime { get; set; }
     }
 }

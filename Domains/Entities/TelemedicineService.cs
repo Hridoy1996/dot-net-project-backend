@@ -23,7 +23,7 @@ namespace Domains.Entities
         public string? Status { get; set; }
         public string? ApplicantComment { get; set; }
         public string? DoctorFeedbackId { get; set; }
-        public DateTime? ServiceInitiationDate { get; set; }
+        public DateTime ServiceInitiationDate { get; set; }
         public string? AssignedDoctorName { get; set; }
         public string? AssignedDoctorUserId { get; set; }
         public List<PatientData>? PatientFiles { get; set; }

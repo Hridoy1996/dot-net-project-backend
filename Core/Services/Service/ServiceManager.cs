@@ -39,11 +39,15 @@ namespace Infrastructure.Core.Services.Service
             return appointmentDetails;
         }
 
-        public async Task<List<AppointmentDetails>> GetAppointmentHistoryAsync(string? currentAppointmentId, string patientId, string loggedInDoctorId, int pageNumber, int pageSize)
+        public async Task<AppointmentHistoryResponse> GetAppointmentHistoryAsync(string? currentAppointmentId, string patientId, string loggedInDoctorId, int pageNumber, int pageSize)
         {
             var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
             filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, loggedInDoctorId);
             filter &= Builders<TelemedicineService>.Filter.Ne(x => x.ItemId, currentAppointmentId);
+
+            var totalCount_Task = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                .Find(filter)
+                .CountDocumentsAsync();
 
             var appointments = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                 .Find(filter)
@@ -52,16 +56,17 @@ namespace Infrastructure.Core.Services.Service
                 .Limit(pageSize)
                 .ToListAsync();
 
-            var result = new List<AppointmentDetails>();
+            var sppointmentDetailsList = new List<AppointmentDetails>();
 
             foreach (var appointment in appointments)
             {
                 var appointmentDetails = _mapper.Map<AppointmentDetails>(appointment);
 
-                result.Add(appointmentDetails);
+                sppointmentDetailsList.Add(appointmentDetails);
             }
 
-            return result;
+            return new AppointmentHistoryResponse { TotalCount = await totalCount_Task, AppointmentDetailsList = sppointmentDetailsList };
+
         }
 
         public async Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)

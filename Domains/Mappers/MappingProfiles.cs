@@ -48,7 +48,7 @@ namespace Domains.Mappers
                   .ForMember(
                     dest => dest.ServiceRequestDate,
                     opt => opt.MapFrom(src => src.ServiceInitiationDate)
-                )
+                );
             CreateMap<FeatureRoleMapCreationCommand, FeatureRoleMap>()
                .ForMember(
                     dest => dest.ItemId,

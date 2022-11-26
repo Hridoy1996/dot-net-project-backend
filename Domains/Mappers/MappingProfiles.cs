@@ -44,7 +44,11 @@ namespace Domains.Mappers
             CreateMap<Domains.Entities.SixInOneMonitorData, Domains.ResponseDataModels.SixInOneMonitorData>();
             CreateMap<Domains.Entities.Otoscope, Domains.ResponseDataModels.Otoscope>();
             CreateMap<Domains.Entities.Stethoscope, Domains.ResponseDataModels.Stethoscope>();
-            CreateMap<TelemedicineService, AppointmentDetails>();
+            CreateMap<TelemedicineService, AppointmentDetails>()
+                  .ForMember(
+                    dest => dest.ServiceRequestDate,
+                    opt => opt.MapFrom(src => src.ServiceInitiationDate)
+                )
             CreateMap<FeatureRoleMapCreationCommand, FeatureRoleMap>()
                .ForMember(
                     dest => dest.ItemId,

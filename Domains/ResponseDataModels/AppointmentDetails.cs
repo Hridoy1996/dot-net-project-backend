@@ -19,7 +19,7 @@ namespace Domains.ResponseDataModels
         public DateTime EndDate { get; set; }
         public string? Status { get; set; }
         public string? ApplicantComment { get; set; }
-        public DateTime ServiceInitiationDate { get; set; }
+        public DateTime ServiceRequestDate { get; set; }
         public List<PatientData>? PatientFiles { get; set; }
         public SixInOneMonitorData SixInOneMonitorData { get; set; }
         public Stethoscope Stethoscope { get; set; }

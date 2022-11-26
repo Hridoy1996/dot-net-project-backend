@@ -7,5 +7,6 @@ namespace Contract
     {
         Task SaveFileAsync(FileUploadCommand command);
         Task<FileDataResponse> GetFileAsync(string fileId);
+        Task DeleteFileAsync(string fileId);
     }
 }

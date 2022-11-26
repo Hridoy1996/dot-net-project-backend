@@ -17,7 +17,7 @@ namespace Domains.Mappers
             CreateMap<CreateUserCommand, TelemedicineAppUser>()
                .ForMember(
                     dest => dest.Id,
-                    opt => opt.MapFrom(src => src.ItemId ?? Guid.NewGuid().ToString())
+                    opt => opt.MapFrom(src => src.UserId ?? Guid.NewGuid().ToString())
                 )
                .ForMember(
                     dest => dest.UserName,

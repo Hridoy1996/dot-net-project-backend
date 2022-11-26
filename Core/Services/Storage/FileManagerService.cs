@@ -2,16 +2,22 @@
 using Contract;
 using Domains.Entities;
 using Domains.ResponseDataModels;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 
 namespace Infrastructure.Core.Services.Storage
 {
     public class FileManagerService : IFileManagerService
     {
         private readonly IMongoTeleMedicineDBContext _mongoTeleMedicineDBContext;
-
-        public FileManagerService(IMongoTeleMedicineDBContext mongoTeleMedicineDBContext)
+        private readonly ILogger<FileManagerService> _logger;
+        public FileManagerService(
+            IMongoTeleMedicineDBContext mongoTeleMedicineDBContext,
+            ILogger<FileManagerService> logger
+            )
         {
+            _logger = logger;
             _mongoTeleMedicineDBContext = mongoTeleMedicineDBContext;
         }
 
@@ -65,6 +71,17 @@ namespace Infrastructure.Core.Services.Storage
             }
 
             return new KeyValuePair<string, string>(fileNameWithOutExtension, x[size-1]);
+        }
+
+        public async Task DeleteFileAsync(string fileId)
+        {
+            var filter = Builders<TelemedicineFile>.Filter.Eq(x => x.ItemId, fileId);
+
+            var result = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineFile>($"{nameof(TelemedicineFile)}s")
+                        .DeleteOneAsync(filter);
+
+            _logger.LogInformation($"In method DeleteFileAsync: delete result: {JsonConvert.SerializeObject(result)}");
+                       
         }
     }
 }

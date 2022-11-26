@@ -64,6 +64,7 @@ namespace TeleMedicine_WebService.Controllers
             try
             {
                 await _fileStorgaeCommunicationService.DeleteFileAsync(fileId);
+                await _fileManagerService.DeleteFileAsync(fileId);
 
                 return new CommonResponseModel { IsSucceed = true, ResponseMessage = "Deleted Successfully", StatusCode = (int) HttpStatusCode.OK };
             }

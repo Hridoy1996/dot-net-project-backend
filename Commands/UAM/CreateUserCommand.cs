@@ -19,13 +19,10 @@ namespace Commands.UAM
         public string? Address { get; set; }
         public string? Email { get; set; }
         public string Password { get; set; } = null!;
-        // [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime DOB { get; set; }
         public string? CountryName { get; set; }
         public string? ProfileImageId { get; set; }
-        public DateTime UserCreationDate { get; set; }
-        public string? OrganizationTitle { get; set; }
-        public string? ItemId { get; set; }
+        public string? UserId { get; set; }
         public string? PhoneNumber { get; set; }
         public float? HeightInCm { get; set; }
         public string? MaritalStatus { get; set; }

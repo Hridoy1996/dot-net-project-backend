@@ -71,12 +71,12 @@ namespace TeleMedicine_WebService.Controllers
                 }
                 else
                 {
-                    return new CommonResponseModel { IsSucceed = true, ResponseMessage = "User Found", StatusCode = (int)HttpStatusCode.NoContent, ResponseData = userData };
+                    return new CommonResponseModel { IsSucceed = true, ResponseMessage = "User Found", StatusCode = (int)HttpStatusCode.OK, ResponseData = userData };
                 }
             }
             catch (Exception exception)
             {
-                _logger.LogError($"Error in LoginAsync method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+                _logger.LogError($"Error in GetUser method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
                 return new CommonResponseModel { IsSucceed = false, ResponseData = "ServerError", StatusCode = (int)HttpStatusCode.InternalServerError };
             }

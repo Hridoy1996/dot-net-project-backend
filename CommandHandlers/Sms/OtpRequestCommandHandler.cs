@@ -1,6 +1,7 @@
 ﻿using Commands.SMS;
 using Contract;
 using MediatR;
+using XAct.Users;
 
 namespace CommandHandlers.Sms
 {
@@ -31,6 +32,8 @@ namespace CommandHandlers.Sms
             await _smsService.SendTextMessageAsync(otpMessage, MakeMobileNumberElevenDigit(request.MobileNumber));
 
             await addOtpKeyTask;
+
+        
 
             return;
         }

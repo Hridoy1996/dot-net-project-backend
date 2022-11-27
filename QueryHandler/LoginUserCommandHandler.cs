@@ -15,14 +15,17 @@ namespace QueryHandler
         private readonly IMongoTeleMedicineDBContext _mongoTeleMedicineDBContext;
         private readonly ITokenService _tokenService;
         private readonly ILogger<LoginQueryHandler> _logger;
+        private readonly IKeyStore _keyStore;
 
         public LoginQueryHandler(IUserManagerServices userManagerServices,
             ILogger<LoginQueryHandler> logger,
             IMongoTeleMedicineDBContext mongoTeleMedicineDBContext,
+            IKeyStore keyStore,
             ITokenService tokenService)
         {
             _userManagerServices = userManagerServices;
             _logger = logger;
+            _keyStore = keyStore;
             _mongoTeleMedicineDBContext = mongoTeleMedicineDBContext;
             _tokenService = tokenService;
         }
@@ -31,6 +34,22 @@ namespace QueryHandler
         {
             try
             {
+                if (request.Roles?.Contains("Patinet") ?? false)
+                {
+                    var val = await _keyStore.GetValueAsync($"TelemedicinePatientOtpLogin_{request.UserName}");
+                  
+                    if(!string.IsNullOrEmpty(val))
+                    {
+                        request.Password = "1qazZAQ!";
+                    }
+                    else
+                    {
+                        return new CommonResponseModel { IsSucceed = false, ResponseMessage = "login failed", StatusCode = (int)HttpStatusCode.Unauthorized };
+                    }
+
+                    await _keyStore.RemoveKeyAsync($"TelemedicinePatientOtpLogin_{request.UserName}");
+                }
+
                 var isLoginVerified = await _userManagerServices.Login(request.UserName, request.Password);
 
                 if (isLoginVerified)

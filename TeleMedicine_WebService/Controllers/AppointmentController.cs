@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
+using System;
 using System.Net;
 using System.Security.Claims;
 
@@ -130,6 +131,30 @@ namespace TeleMedicine_WebService.Controllers
                 _logger.LogError($"Error in GetLatestAppointmentDetails method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
+            }
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<CommonResponseModel> SubmitFeedback([FromBody] FeedBackSubmissionCommand command)
+        {
+            try
+            {
+                if(command == null)
+                {
+                    return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
+
+                }
+
+                command.DoctorUserId = User.FindFirstValue("UserId");
+
+                return (CommonResponseModel)await _mediator.Send(command);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in SubmitFeedback method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, ResponseMessage = "Server Error!", StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
     }

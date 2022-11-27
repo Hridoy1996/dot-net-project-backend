@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Commands.Service;
 using Contract;
 using Domains.Entities;
 using Domains.ResponseDataModels;
@@ -143,6 +144,24 @@ namespace Infrastructure.Core.Services.Service
                 return false;
             }
 
+        }
+
+        public async Task<bool> SubmitFeedbackAsync(FeedBackSubmissionCommand request)
+        {
+            try
+            {
+                var feedback = _mapper.Map<DoctorFeedback>(request);
+
+                feedback.FollowUpDate = DateTime.Now.AddDays(request?.FollowUpAfter ?? default);
+
+                await _mongoTeleMedicineDBContext.GetCollection<DoctorFeedback>($"{nameof(DoctorFeedback)}s").InsertOneAsync(feedback);
+
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
     }
 }

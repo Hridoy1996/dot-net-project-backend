@@ -53,7 +53,25 @@ namespace Domains.Mappers
                .ForMember(
                     dest => dest.ItemId,
                     opt => opt.MapFrom(src => src.Id ?? Guid.NewGuid().ToString())
-                );
+                ); 
+            
+            
+            CreateMap<Commands.Service.PrescribedMedicine, Domains.Entities.PrescribedMedicine>();
+            CreateMap<FeedBackSubmissionCommand, DoctorFeedback>()
+                  .ForMember(
+                    dest => dest.ItemId,
+                    opt => opt.MapFrom(src => Guid.NewGuid().ToString())
+                ).ForMember(
+                    dest => dest.CreateDate,
+                    opt => opt.MapFrom(src => Guid.NewGuid().ToString())
+                ).ForMember(
+                    dest => dest.LastUpdatedBy,
+                    opt => opt.MapFrom(src => Guid.NewGuid().ToString())
+                )
+                ;
+        
+
+
 
             //  public InfrastructureMappingProfile()
             //{

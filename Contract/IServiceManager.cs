@@ -1,4 +1,5 @@
-﻿using Domains.Entities;
+﻿using Commands.Service;
+using Domains.Entities;
 using Domains.ResponseDataModels;
 
 namespace Contract
@@ -9,5 +10,6 @@ namespace Contract
         Task<AppointmentHistoryResponse> GetAppointmentHistoryAsync(string? currentAppointmentId, string patientId, string loggedInDoctorId, int pageNumber, int pageSize);
         Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10);
         Task<bool> PlaceAppointmentAsync(TelemedicineService user);
+        Task<bool> SubmitFeedbackAsync(FeedBackSubmissionCommand request);
     }
 }

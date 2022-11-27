@@ -1,8 +1,10 @@
 ﻿using Commands.SMS;
 using Contract;
+using Infrastructure.Core.Managers;
 using MediatR;
 using Shared.Models;
 using System.Net;
+using XAct.Users;
 
 namespace CommandHandlers.Sms
 {
@@ -11,8 +13,14 @@ namespace CommandHandlers.Sms
         private readonly IOtpService _otpService;
         private readonly IKeyStore _keyStore;
         private readonly ISmsService _smsService;
-        public OtpVerificationCommandHandler(IOtpService otpService, IKeyStore keyStore, ISmsService smsService)
+        private readonly IUserManagerServices _userManagerServices;
+        public OtpVerificationCommandHandler(
+            IOtpService otpService,
+            IKeyStore keyStore, 
+            UserManagerServices userManagerServices,
+            ISmsService smsService)
         {
+            _userManagerServices = userManagerServices;
             _otpService = otpService;
             _keyStore = keyStore;
             _smsService = smsService;

@@ -30,6 +30,12 @@ namespace CommandHandler
             try
             {
                 var user = _mapper.Map<TelemedicineAppUser>(request);
+
+                if (user.Roles.Contains("Patinet"))
+                {
+                    request.Password = "1qazZAQ!";
+                }
+
                 var result = await _userManagerServices.RegisterUserAsync(user, request.Password);
 
                 return new CommonResponseModel { IsSucceed = result, StatusCode = (int)HttpStatusCode.OK };

@@ -10,12 +10,11 @@ namespace CommandHandlers.Sms
     {
         private readonly IOtpService _otpService;
         private readonly IKeyStore _keyStore;
-        private readonly ISmsService _smsService;
-        public OtpVerificationCommandHandler(IOtpService otpService, IKeyStore keyStore, ISmsService smsService)
+        public OtpVerificationCommandHandler(IOtpService otpService,
+            IKeyStore keyStore)
         {
             _otpService = otpService;
             _keyStore = keyStore;
-            _smsService = smsService;
         }
 
         public async Task<CommonResponseModel> Handle(OtpVerificationCommand request, CancellationToken cancellationToken)
@@ -28,6 +27,11 @@ namespace CommandHandlers.Sms
 
                 if (cachedHashString == hashedOtp)
                 {
+                    if (request.Role?.Contains("Patinet") ?? false)
+                    {
+                        await _keyStore.AddKeyWithExpiryAsync($"TelemedicinePatientOtpLogin_{request.MobileNumber}", "True", (1000 * 60 * 2));
+                    }
+
                     return new CommonResponseModel { IsSucceed = true, StatusCode = (int)HttpStatusCode.OK, ResponseMessage = "verified" };
                 }
                 else

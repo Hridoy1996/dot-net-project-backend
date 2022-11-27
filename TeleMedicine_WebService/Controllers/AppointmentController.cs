@@ -147,6 +147,7 @@ namespace TeleMedicine_WebService.Controllers
                 }
 
                 command.DoctorUserId = User.FindFirstValue("UserId");
+                command.DoctorDisplayName = User.FindFirstValue(ClaimTypes.GivenName);
 
                 return (CommonResponseModel)await _mediator.Send(command);
             }

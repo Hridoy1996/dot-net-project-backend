@@ -63,10 +63,10 @@ namespace Domains.Mappers
                     opt => opt.MapFrom(src => Guid.NewGuid().ToString())
                 ).ForMember(
                     dest => dest.CreateDate,
-                    opt => opt.MapFrom(src => Guid.NewGuid().ToString())
+                    opt => opt.MapFrom(src => DateTime.UtcNow)
                 ).ForMember(
                     dest => dest.LastUpdatedBy,
-                    opt => opt.MapFrom(src => Guid.NewGuid().ToString())
+                    opt => opt.MapFrom(src => DateTime.UtcNow)
                 )
                 ;
         

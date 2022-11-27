@@ -38,7 +38,7 @@ namespace QueryHandler
                     var filter = Builders<TelemedicineAppUser>.Filter.Eq(x => x.UserName, request.UserName.ToLower());
                     var user = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineAppUser>($"ApplicationUsers").Find(filter).FirstOrDefaultAsync();
 
-                    var token = _tokenService.CreateToken(user.PhoneNumber, user.Id, $"{user.FirstName} {user.FirstName}", user.Roles);
+                    var token = _tokenService.CreateToken(user.PhoneNumber, user.Id, $"{user.FirstName} {user.LastName}", user.Roles);
 
                     return new CommonResponseModel { IsSucceed = true, ResponseData = token, ResponseMessage = "login success", StatusCode = (int)HttpStatusCode.OK };
                 }

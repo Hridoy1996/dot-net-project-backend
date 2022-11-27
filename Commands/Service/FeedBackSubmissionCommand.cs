@@ -19,6 +19,7 @@ namespace Commands.Service
         public string? PatinetPhoneNumber { get; set; }
         public string? PatinetCondition { get; set; }
         public string? DoctorUserId { get; set; }
+        public string? DoctorDisplayName { get; set; }
     }
 
     public class PrescribedMedicine

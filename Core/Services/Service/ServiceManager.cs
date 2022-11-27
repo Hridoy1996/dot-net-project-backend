@@ -153,6 +153,7 @@ namespace Infrastructure.Core.Services.Service
                 var feedback = _mapper.Map<DoctorFeedback>(request);
 
                 feedback.FollowUpDate = DateTime.Now.AddDays(request?.FollowUpAfter ?? default);
+                feedback.LastUpdatedBy = feedback.DoctorUserId;
 
                 await _mongoTeleMedicineDBContext.GetCollection<DoctorFeedback>($"{nameof(DoctorFeedback)}s").InsertOneAsync(feedback);
 

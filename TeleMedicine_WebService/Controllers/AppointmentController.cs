@@ -140,7 +140,7 @@ namespace TeleMedicine_WebService.Controllers
         {
             try
             {
-                if(command == null)
+                if(command == null || string.IsNullOrEmpty(command.ApplicantUserId))
                 {
                     return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
 

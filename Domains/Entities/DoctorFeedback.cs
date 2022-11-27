@@ -13,8 +13,8 @@ namespace Domains.Entities
         public string? PdfFileId { get; set; }
         public string? DoctorDisplayName { get; set; }
         public string? DoctorUserId { get; set; }
-        public string? PatinetPhoneNumber { get; set; }
-        public string? PatinetCondition { get; set; }
+        public string? PatientPhoneNumber { get; set; }
+        public string? PatientCondition { get; set; }
     }
 
     public class PrescribedMedicine

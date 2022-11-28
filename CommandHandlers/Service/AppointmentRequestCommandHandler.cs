@@ -30,8 +30,8 @@ namespace CommandHandlers.Service
         {
             try
             {
-                var user = _mapper.Map<TelemedicineService>(request);
-                bool created = await _appointmentManager.PlaceAppointmentAsync(user);
+                var service = _mapper.Map<TelemedicineService>(request);
+                bool created = await _appointmentManager.PlaceAppointmentAsync(service);
 
                 return new CommonResponseModel { IsSucceed = created, StatusCode = (int)HttpStatusCode.OK };
             }

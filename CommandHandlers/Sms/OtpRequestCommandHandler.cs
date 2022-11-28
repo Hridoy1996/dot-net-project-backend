@@ -1,7 +1,7 @@
 ﻿using Commands.SMS;
 using Contract;
 using MediatR;
-using XAct.Users;
+using Microsoft.Extensions.Logging;
 
 namespace CommandHandlers.Sms
 {
@@ -10,8 +10,14 @@ namespace CommandHandlers.Sms
         private readonly IOtpService _otpService;
         private readonly IKeyStore _keyStore;
         private readonly ISmsService _smsService;
-        public OtpRequegstCommandHandler(IOtpService otpService, IKeyStore keyStore, ISmsService smsService)
+        private readonly ILogger<OtpRequegstCommandHandler> _logger;
+
+        public OtpRequegstCommandHandler(IOtpService otpService,
+            IKeyStore keyStore,
+            ILogger<OtpRequegstCommandHandler> logger,
+            ISmsService smsService)
         {
+            _logger = logger;
             _otpService = otpService;
             _keyStore = keyStore;
             _smsService = smsService;

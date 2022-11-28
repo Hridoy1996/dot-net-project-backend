@@ -55,7 +55,11 @@ namespace Shared.Enums
         [BsonRepresentation(BsonType.String)]
         Ongoing,
         [BsonRepresentation(BsonType.String)]
-        Upcoming
+        Upcoming,     
+        [BsonRepresentation(BsonType.String)]
+        Pending,
+        [BsonRepresentation(BsonType.String)]
+        Expired
     }
 
     public enum BloodGroup

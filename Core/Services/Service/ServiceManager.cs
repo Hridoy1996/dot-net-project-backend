@@ -6,6 +6,7 @@ using Domains.ResponseDataModels;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using Shared.Enums;
 
 namespace Infrastructure.Core.Services.Service
@@ -15,7 +16,7 @@ namespace Infrastructure.Core.Services.Service
         private readonly IMongoTeleMedicineDBContext _mongoTeleMedicineDBContext;
         private readonly IMapper _mapper;
         private readonly ILogger<AppointmentManager> _logger;
-        public AppointmentManager(IMongoTeleMedicineDBContext mongoTeleMedicineDBContext, 
+        public AppointmentManager(IMongoTeleMedicineDBContext mongoTeleMedicineDBContext,
             IMapper mapper,
             ILogger<AppointmentManager> logger
             )
@@ -27,7 +28,7 @@ namespace Infrastructure.Core.Services.Service
 
         public async Task<AppointmentDetails?> GetAppointmentDetailsAsync(string appointmentId, string patientId, string doctorId)
         {
-            var filter =  Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
+            var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
             filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorId);
             filter &= Builders<TelemedicineService>.Filter.Eq(x => x.ItemId, appointmentId);
 
@@ -72,7 +73,7 @@ namespace Infrastructure.Core.Services.Service
 
         public async Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)
         {
-            _logger.LogInformation($"In GetAppointments method: searchKey: {searchKey}, status: {status}, type: {type}, doctorUserId: { doctorUserId}");
+            _logger.LogInformation($"In GetAppointments method: searchKey: {searchKey}, status: {status}, type: {type}, doctorUserId: {doctorUserId}");
 
             var filter = Builders<TelemedicineService>.Filter.Empty;
 
@@ -131,16 +132,43 @@ namespace Infrastructure.Core.Services.Service
                 if (service.ServiceType == nameof(AppointmentType.Offline))
                 {
                     service.StartDate = DateTime.UtcNow;
+                    service.EndDate = DateTime.UtcNow.AddDays(1);
+                    service.Status = nameof(AppointmentStatus.Pending);
+                    service.AssignedDoctorUserId = "97689638-956c-4c09-b3b2-f835f74c9e57"; //TODO:
                     service.Status = nameof(AppointmentStatus.Ongoing);
                 }
-
-                service.AssignedDoctorUserId = "97689638-956c-4c09-b3b2-f835f74c9e57";
 
                 await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").InsertOneAsync(service);
 
                 return true;
             }
             catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
+        public async Task<bool> ResolveAppointmentAsync(string serviceId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(serviceId))
+                {
+                    return false;
+                }
+
+                var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ItemId, serviceId);
+                var updateDefinition = Builders<TelemedicineService>.Update.Set(x => x.Status, nameof(AppointmentStatus.Resolved));
+
+                var updateResult = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                    .UpdateOneAsync(filter, updateDefinition);
+
+                _logger.LogInformation($"In ResolveAppointmentAsync: updateResult: {JsonConvert.SerializeObject(updateResult)}");
+
+                return false;
+            }
+            catch (Exception)
             {
                 return false;
             }
@@ -160,9 +188,33 @@ namespace Infrastructure.Core.Services.Service
 
                 return true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public async Task SyncServiceStatusAsync()
+        {
+            try
+            {
+                var currentTime = DateTime.UtcNow;
+
+                var filter = Builders<TelemedicineService>.Filter.Ne(x => x.Status, nameof(AppointmentStatus.Resolved));
+                filter &= Builders<TelemedicineService>.Filter.Ne(x => x.EndDate, default);
+                filter &= Builders<TelemedicineService>.Filter.Lte(x => x.EndDate, currentTime);
+                var updateDefinition = Builders<TelemedicineService>.Update.Set(x => x.Status, nameof(AppointmentStatus.Expired));
+
+                var updateResults = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                    .UpdateManyAsync(filter, updateDefinition);
+
+                _logger.LogInformation($"In SyncServiceStatusAsync: updateResult: {JsonConvert.SerializeObject(updateResults)}");
+
+
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in SyncServiceStatusAsync \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
             }
         }
     }

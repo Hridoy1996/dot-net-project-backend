@@ -1,6 +1,7 @@
 ﻿using Commands.Service;
 using Contract;
 using Infrastructure.Core.HelperService;
+using Infrastructure.Core.Managers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Shared.Models;
 using System;
 using System.Net;
 using System.Security.Claims;
+using XAct.Users;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -156,6 +158,29 @@ namespace TeleMedicine_WebService.Controllers
                 _logger.LogError($"Error in SubmitFeedback method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = "Server Error!", StatusCode = (int)HttpStatusCode.InternalServerError };
+            }
+        }
+
+
+        [HttpPut]
+        [Authorize]
+        public async Task<CommonResponseModel> ResolveAppointment([FromBody] AppointmentResolveCommand command)
+        {
+            try
+            {
+                if (command == null || string.IsNullOrEmpty(command.ServiceId))
+                {
+                    return new CommonResponseModel { IsSucceed = true, ResponseMessage = "Invalid payload!", StatusCode = (int)HttpStatusCode.NoContent };
+                }
+
+                return (CommonResponseModel)await _mediator.Send(command);
+                  
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in ResolveAppointment method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, ResponseData = "ServerError", StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
     }

@@ -31,9 +31,7 @@ namespace CommandHandlers.Sms
             string otpMessage = $"Your OTP is {request.Otp}. Don't share it with anybody!";
             await _smsService.SendTextMessageAsync(otpMessage, MakeMobileNumberElevenDigit(request.MobileNumber));
 
-            await addOtpKeyTask;
-
-        
+            await addOtpKeyTask; 
 
             return;
         }

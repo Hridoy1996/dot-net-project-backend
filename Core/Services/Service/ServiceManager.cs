@@ -105,6 +105,7 @@ namespace Infrastructure.Core.Services.Service
                         .Select(x =>
                             new ApppointmentResponse
                             {
+                                PatientUserName = x.ApplicantUserName,
                                 ApplicantUserId = x.ApplicantUserId,
                                 ApplicantDisplayName = x.ApplicantDisplayName,
                                 Id = x.ItemId,

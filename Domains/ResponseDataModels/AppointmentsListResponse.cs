@@ -17,6 +17,7 @@ namespace Domains.ResponseDataModels
     {
         public string? Id { get; set; }
         public string? ApplicantDisplayName { get; set; }
+        public string? PatientUserName { get; set; }
         public string? ApplicantUserId { get; set; }
         public string? ServiceType { get; set; }
         public string? StartDate { get; set; }

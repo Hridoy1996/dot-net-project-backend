@@ -13,6 +13,7 @@ namespace Domains.ResponseDataModels
         }
 
         public string? ApplicantUserId { get; set; }
+        public string? ApplicantPhoneNumber { get; set; }
         public string? ApplicantDisplayName { get; set; }
         public string? ServiceType { get; set; }
         public DateTime StartDate { get; set; }

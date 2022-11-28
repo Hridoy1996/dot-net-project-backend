@@ -6,6 +6,7 @@ using Domains.Mappers;
 using Infrastructure.Core.Caching;
 using Infrastructure.Core.Managers;
 using Infrastructure.Core.Repository;
+using Infrastructure.Core.Scheduler;
 using Infrastructure.Core.Services;
 using Infrastructure.Core.Services.Service;
 using Infrastructure.Core.Services.Storage;
@@ -64,6 +65,8 @@ builder.Services.Configure<MongoSettings>(config.GetSection("MongoSettings"));
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
+
+builder.Services.AddHostedService<WorkerService>();
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IFileManagerService, FileManagerService>();

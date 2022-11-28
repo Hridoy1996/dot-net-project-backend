@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Queries.UAM;
 using Shared.Models;
 using System.Net;
-using System.Security.Claims;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -81,8 +80,10 @@ namespace TeleMedicine_WebService.Controllers
                 return new CommonResponseModel { IsSucceed = false, ResponseData = "ServerError", StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
+
+
     }
 
 }
-   
+
 

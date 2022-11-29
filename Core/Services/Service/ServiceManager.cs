@@ -165,7 +165,7 @@ namespace Infrastructure.Core.Services.Service
 
                 _logger.LogInformation($"In ResolveAppointmentAsync: updateResult: {JsonConvert.SerializeObject(updateResult)}");
 
-                return false;
+                return true;
             }
             catch (Exception)
             {

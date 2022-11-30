@@ -26,7 +26,7 @@ using StackExchange.Redis;
 using TeleMedicine_WebService.Pipeline;
 
 var builder = WebApplication.CreateBuilder(args);
-
+    
 var config = builder.Configuration;
 
 builder.Services.AddControllers();

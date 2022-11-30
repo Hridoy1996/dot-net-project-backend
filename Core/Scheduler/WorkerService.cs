@@ -1,5 +1,7 @@
 ﻿using Contract;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using IApplicationLifetime = Microsoft.Extensions.Hosting.IApplicationLifetime;
 
 namespace Infrastructure.Core.Scheduler
 {
@@ -7,18 +9,32 @@ namespace Infrastructure.Core.Scheduler
     {
         private const int generalDelay = 5 * 60 * 1000;
         private readonly IAppointmentManager _appointmentManager;
+        private readonly IApplicationLifetime _applicationLifeTime;
 
-        public WorkerService(IAppointmentManager appointmentManager)
+        public WorkerService(IAppointmentManager appointmentManager, 
+            IApplicationLifetime applicationLifetime)
         {
             _appointmentManager = appointmentManager;
+            _applicationLifeTime = applicationLifetime;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                await Task.Delay(generalDelay, stoppingToken);
-                await SyncServiceStatus();
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    await Task.Delay(generalDelay, stoppingToken);
+                    await SyncServiceStatus();
+                }
+            }
+            catch (Exception)
+            {
+                _applicationLifeTime.StopApplication();
+            }
+            finally
+            {
+
             }
         }
 

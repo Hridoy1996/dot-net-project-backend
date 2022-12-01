@@ -123,7 +123,7 @@ app.UseRouting();  // first
 app.UseCors("AllowAllOrigins");
 app.UseCors("AllowAllHeaders");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

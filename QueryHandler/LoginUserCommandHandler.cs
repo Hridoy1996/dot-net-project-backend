@@ -58,6 +58,8 @@ namespace QueryHandler
 
                     var token = _tokenService.CreateToken(user.PhoneNumber, user.Id, $"{user.FirstName} {user.LastName}", user.Roles);
 
+                    await _keyStore.RemoveKeyAsync($"TelemedicinePatientOtp_{request.UserName}");
+                    
                     return new CommonResponseModel { IsSucceed = true, ResponseData = token, ResponseMessage = "login success", StatusCode = (int)HttpStatusCode.OK };
                 }
                 else

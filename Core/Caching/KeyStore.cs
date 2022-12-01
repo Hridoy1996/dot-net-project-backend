@@ -57,7 +57,14 @@ namespace Infrastructure.Core.Caching
 
         public async Task<bool> RemoveKeyAsync(string key)
         {
-            return await _database.KeyDeleteAsync(key);
+            try
+            {
+                return await _database.KeyDeleteAsync(key);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

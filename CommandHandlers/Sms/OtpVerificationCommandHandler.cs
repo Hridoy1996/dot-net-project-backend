@@ -27,9 +27,9 @@ namespace CommandHandlers.Sms
 
                 if (cachedHashString == hashedOtp)
                 {
-                    if (request.Role?.Contains("Patinet") ?? false)
+                    if (request.Role?.Contains("Patient") ?? false)
                     {
-                        await _keyStore.AddKeyWithExpiryAsync($"TelemedicinePatientOtpLogin_{request.MobileNumber}", "True", (1000 * 60 * 2));
+                        await _keyStore.AddKeyWithExpiryAsync($"TelemedicinePatientOtp_{request.MobileNumber}", "True", (1000 * 60 * 2));
                     }
 
                     return new CommonResponseModel { IsSucceed = true, StatusCode = (int)HttpStatusCode.OK, ResponseMessage = "verified" };

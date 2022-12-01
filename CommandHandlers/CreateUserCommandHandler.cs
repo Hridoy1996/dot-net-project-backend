@@ -2,6 +2,7 @@
 using Commands.UAM;
 using Contract;
 using Domains.Entities;
+using Infrastructure.Core.Caching;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Shared.Models;
@@ -12,14 +13,17 @@ namespace CommandHandler
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CommonResponseModel>
     {
         private readonly IMapper _mapper;
+        private readonly IKeyStore _keyStore;
         private readonly IUserManagerServices _userManagerServices;
         private readonly ILogger<CreateUserCommandHandler> _logger;
 
         public CreateUserCommandHandler(
             IMapper mapper,
+            IKeyStore keyStore,
             ILogger<CreateUserCommandHandler> logger,
             IUserManagerServices userManagerServices)
         {
+            _keyStore = keyStore;
             _logger = logger;
             _mapper = mapper;
             _userManagerServices = userManagerServices;
@@ -31,9 +35,16 @@ namespace CommandHandler
             {
                 var user = _mapper.Map<TelemedicineAppUser>(request);
 
-                if (user.Roles.Contains("Patinet"))
+                if (request.Roles?.Contains("Patient") ?? false)
                 {
                     request.Password = "1qazZAQ!";
+
+                    var val = await _keyStore.GetValueAsync($"TelemedicinePatientOtp_{user.UserName}");
+
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        return new CommonResponseModel { IsSucceed = false, ResponseMessage = "Register failed", StatusCode = (int)HttpStatusCode.Unauthorized };
+                    }
                 }
 
                 var result = await _userManagerServices.RegisterUserAsync(user, request.Password);

@@ -34,9 +34,9 @@ namespace QueryHandler
         {
             try
             {
-                if (request.Roles?.Contains("Patinet") ?? false)
+                if (request.Roles?.Contains("Patient") ?? false)
                 {
-                    var val = await _keyStore.GetValueAsync($"TelemedicinePatientOtpLogin_{request.UserName}");
+                    var val = await _keyStore.GetValueAsync($"TelemedicinePatientOtp_{request.UserName}");
                   
                     if(!string.IsNullOrEmpty(val))
                     {
@@ -47,7 +47,6 @@ namespace QueryHandler
                         return new CommonResponseModel { IsSucceed = false, ResponseMessage = "login failed", StatusCode = (int)HttpStatusCode.Unauthorized };
                     }
 
-                    await _keyStore.RemoveKeyAsync($"TelemedicinePatientOtpLogin_{request.UserName}");
                 }
 
                 var isLoginVerified = await _userManagerServices.Login(request.UserName, request.Password);

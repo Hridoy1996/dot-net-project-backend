@@ -71,7 +71,7 @@ namespace Infrastructure.Core.Services.Service
 
         }
 
-        public async Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, int page = 1, int size = 10)
+        public async Task<AppointmentsListResponse> GetAppointmentsAsync(string searchKey, string status, string type, string doctorUserId, string patientId, int page = 1, int size = 10)
         {
             _logger.LogInformation($"In GetAppointments method: searchKey: {searchKey}, status: {status}, type: {type}, doctorUserId: {doctorUserId}");
 
@@ -92,6 +92,10 @@ namespace Infrastructure.Core.Services.Service
             if (!string.IsNullOrEmpty(doctorUserId))
             {
                 filter &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, doctorUserId);
+            }
+            if (!string.IsNullOrEmpty(patientId))
+            {
+                filter &= Builders<TelemedicineService>.Filter.Eq(x => x.ApplicantUserId, patientId);
             }
 
             var totalCount = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")

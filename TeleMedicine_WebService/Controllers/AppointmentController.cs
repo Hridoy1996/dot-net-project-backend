@@ -1,5 +1,6 @@
 ﻿using Commands.Service;
 using Contract;
+using Domains.ResponseDataModels;
 using Infrastructure.Core.HelperService;
 using Infrastructure.Core.Managers;
 using MediatR;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
 using System;
 using System.Net;
+using System.Numerics;
 using System.Security.Claims;
 using XAct.Users;
 
@@ -55,15 +57,20 @@ namespace TeleMedicine_WebService.Controllers
             {
                 var loggedInUserRoleString = User.FindFirstValue("Roles");
 
-                var loggedInDoctorId = User.FindFirstValue("UserId");
+                var loggedInUserId = User.FindFirstValue("UserId");
                 var loggedInUserRole = DataConversions.GetRoles(loggedInUserRoleString);
 
-                if (!loggedInUserRole.Contains("Doctor"))
-                {
-                    loggedInDoctorId = String.Empty;
-                }
+                var appointments = new AppointmentsListResponse();
 
-                var appointments = await _appointmentManager.GetAppointmentsAsync(searchKey, status, type, loggedInDoctorId, pageNumber, pageSize);
+                if (loggedInUserRole.Contains("Doctor")) 
+                {
+                    appointments = await _appointmentManager.GetAppointmentsAsync(searchKey, status, type, loggedInUserId, string.Empty, pageNumber, pageSize);
+                }
+                
+                if (loggedInUserRole.Contains("Patient"))
+                {
+                    appointments = await _appointmentManager.GetAppointmentsAsync(searchKey, status, type, string.Empty, loggedInUserId, pageNumber, pageSize);
+                }
 
                 if (appointments.TotalCount != 0)
                 {

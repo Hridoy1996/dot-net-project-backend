@@ -195,6 +195,32 @@ namespace Infrastructure.Core.Services.Service
                 return false;
             }
         }
+        
+        public async Task<FeedbackResponseModel> GetFeedbackAsync(string feedbackId, string patiendUserId)
+        {
+            try
+            {
+                _logger.LogError($"In method GetFeedbackAsync: feedbackId: {feedbackId} patiendUserId {patiendUserId}");
+
+                var filter = Builders<DoctorFeedback>.Filter.Eq(x => x.ItemId, feedbackId);
+                    filter &= Builders<DoctorFeedback>.Filter.Eq(x => x.ApplicantUserId, patiendUserId);
+
+                var feedBack = await _mongoTeleMedicineDBContext.GetCollection<DoctorFeedback>($"{nameof(DoctorFeedback)}s")
+                    .Find(filter)
+                    .FirstOrDefaultAsync()
+                    ;
+
+                var feedback = _mapper.Map<FeedbackResponseModel>(feedBack);
+
+                return feedback;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"In method GetFeedbackAsync: errors: {JsonConvert.SerializeObject(ex)}");
+
+                return null;
+            }
+        }
 
         public async Task SyncServiceStatusAsync()
         {

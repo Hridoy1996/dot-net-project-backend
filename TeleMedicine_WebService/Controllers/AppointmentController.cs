@@ -6,6 +6,7 @@ using Infrastructure.Core.Managers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.Core.WireProtocol.Messages;
 using Shared.Models;
 using System;
 using System.Net;
@@ -152,7 +153,14 @@ namespace TeleMedicine_WebService.Controllers
                 if(command == null || string.IsNullOrEmpty(command.ApplicantUserId))
                 {
                     return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
+                }
 
+                var loggedInUserRoleString = User.FindFirstValue("Roles");
+                var loggedInUserRole = DataConversions.GetRoles(loggedInUserRoleString);
+
+                if (!loggedInUserRole.Contains("Doctor"))
+                {
+                    return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.Unauthorized };
                 }
 
                 command.DoctorUserId = User.FindFirstValue("UserId");
@@ -163,6 +171,45 @@ namespace TeleMedicine_WebService.Controllers
             catch (Exception exception)
             {
                 _logger.LogError($"Error in SubmitFeedback method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
+
+                return new CommonResponseModel { IsSucceed = false, ResponseMessage = "Server Error!", StatusCode = (int)HttpStatusCode.InternalServerError };
+            }
+        }  
+        
+        [HttpGet]
+        [Authorize]
+        public async Task<CommonResponseModel> GetFeedback(string feedbackId)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(feedbackId))
+                {
+                    return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
+                }
+
+                var loggedInUserRoleString = User.FindFirstValue("Roles");
+                var loggedInUserId = User.FindFirstValue("UserId");
+                var loggedInUserRole = DataConversions.GetRoles(loggedInUserRoleString);
+
+                if (!loggedInUserRole.Contains("Patient"))
+                {
+                    return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.Unauthorized };
+                }
+
+                var feedback = await _appointmentManager.GetFeedbackAsync(feedbackId, loggedInUserId);
+
+                if (feedback == null) 
+                {
+                    return new CommonResponseModel{ IsSucceed = true, StatusCode = (int)HttpStatusCode.NoContent };
+                }
+                else
+                {
+                    return new  CommonResponseModel{ IsSucceed = true, ResponseData = feedback, ResponseMessage = "Data found!", StatusCode = (int)HttpStatusCode.OK };
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Error in GetFeedback method \nMessage: {exception.Message} \nStackTrace: {exception.StackTrace}", exception);
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = "Server Error!", StatusCode = (int)HttpStatusCode.InternalServerError };
             }

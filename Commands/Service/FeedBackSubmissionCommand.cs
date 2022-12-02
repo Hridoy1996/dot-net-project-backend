@@ -17,6 +17,10 @@ namespace Commands.Service
         public string? AdditionalComment { get; set; }
         public int? FollowUpAfter { get; set; }
         public string? PatientPhoneNumber { get; set; }
+        public string? EcgCondition { get; set; }
+        public string? HeartCondition { get; set; }
+        public string? LungConition { get; set; }
+        public string? OtoscopeConition { get; set; }
         public string? PatientCondition { get; set; }
         public string? DoctorUserId { get; set; }
         public string? DoctorDisplayName { get; set; }

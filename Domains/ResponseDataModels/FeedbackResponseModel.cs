@@ -1,11 +1,7 @@
-﻿using Shared.DbEntities.Base;
-
-namespace Domains.Entities
+﻿namespace Domains.ResponseDataModels
 {
-    public class DoctorFeedback : BaseEntity
+    public class FeedbackResponseModel
     {
-        public string? ApplicantUserId { get; set; }
-        public string? ApplicantDisplayName { get; set; }
         public List<PrescribedMedicine>? PrescribedMedicines { get; set; }
         public List<string>? PrescribedTests { get; set; }
         public string? AdditionalComment { get; set; }
@@ -20,10 +16,12 @@ namespace Domains.Entities
         public string? LungConition { get; set; }
         public string? OtoscopeConition { get; set; }
     }
-
     public class PrescribedMedicine
     {
         public string? Name { get; set; }
         public string? Instruction { get; set; }
     }
 }
+
+
+

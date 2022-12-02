@@ -13,5 +13,6 @@ namespace Contract
         Task<bool> ResolveAppointmentAsync(string serviceId);
         Task<bool> SubmitFeedbackAsync(FeedBackSubmissionCommand request);
         Task SyncServiceStatusAsync();
+        Task<FeedbackResponseModel> GetFeedbackAsync(string feedbackId, string patiendUserId);
     }
 }

@@ -8,6 +8,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Shared.Enums;
+using XAct.Messages;
 
 namespace Infrastructure.Core.Services.Service
 {
@@ -129,6 +130,8 @@ namespace Infrastructure.Core.Services.Service
         {
             try
             {
+                _logger.LogInformation($"In method PlaceAppointmentAsync: TelemedicineService: {JsonConvert.SerializeObject(service)}");
+
                 service.ServiceInitiationDate = DateTime.UtcNow;
 
                 if (service.ServiceType == nameof(AppointmentType.Offline))
@@ -146,15 +149,18 @@ namespace Infrastructure.Core.Services.Service
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Error In method ResolveAppointmentAsync:\nerrors: {JsonConvert.SerializeObject(ex)}");
+
                 return false;
             }
-
         }
 
         public async Task<bool> ResolveAppointmentAsync(string serviceId)
         {
             try
             {
+                _logger.LogInformation($"In method ResolveAppointmentAsync: serviceId: {serviceId}");
+
                 if (string.IsNullOrEmpty(serviceId))
                 {
                     return false;
@@ -170,17 +176,20 @@ namespace Infrastructure.Core.Services.Service
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Error In method ResolveAppointmentAsync:\nerrors: {JsonConvert.SerializeObject(ex)}");
+
                 return false;
             }
-
         }
 
         public async Task<bool> SubmitFeedbackAsync(FeedBackSubmissionCommand request)
         {
             try
             {
+                _logger.LogInformation($"In method SubmitFeedbackAsync: FeedBackSubmissionCommand: {JsonConvert.SerializeObject(request)}");
+
                 var feedback = _mapper.Map<DoctorFeedback>(request);
 
                 feedback.FollowUpDate = DateTime.Now.AddDays(request?.FollowUpAfter ?? default);
@@ -190,8 +199,9 @@ namespace Infrastructure.Core.Services.Service
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Error In method SubmitFeedbackAsync:\nerrors: {JsonConvert.SerializeObject(ex)}");
                 return false;
             }
         }
@@ -200,7 +210,7 @@ namespace Infrastructure.Core.Services.Service
         {
             try
             {
-                _logger.LogError($"In method GetFeedbackAsync: feedbackId: {feedbackId} patiendUserId {patiendUserId}");
+                _logger.LogInformation($"In method GetFeedbackAsync: feedbackId: {feedbackId} patiendUserId {patiendUserId}");
 
                 var filter = Builders<DoctorFeedback>.Filter.Eq(x => x.ItemId, feedbackId);
                     filter &= Builders<DoctorFeedback>.Filter.Eq(x => x.ApplicantUserId, patiendUserId);
@@ -237,8 +247,6 @@ namespace Infrastructure.Core.Services.Service
                     .UpdateManyAsync(filter, updateDefinition);
 
                 _logger.LogInformation($"In SyncServiceStatusAsync: updateResult: {JsonConvert.SerializeObject(updateResults)}");
-
-
             }
             catch (Exception exception)
             {

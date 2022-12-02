@@ -20,11 +20,9 @@ namespace Domains.ResponseDataModels
         public string? PatientUserName { get; set; }
         public string? ApplicantUserId { get; set; }
         public string? ServiceType { get; set; }
-        public string? StartDate { get; set; }
-        public string? EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string? Status { get; set; }
         public string? ServiceRequestDate { get; set; }
-        public string? StartTime { get; set; }
-        public string? EndTime { get; set; }
     }
 }

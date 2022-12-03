@@ -5,6 +5,7 @@ using Domains.Entities;
 using Infrastructure.Core.Caching;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 using Shared.Models;
 using System.Net;
 
@@ -45,6 +46,11 @@ namespace CommandHandler
                     {
                         return new CommonResponseModel { IsSucceed = false, ResponseMessage = "Register failed", StatusCode = (int)HttpStatusCode.Unauthorized };
                     }
+                }
+
+                if (request.Roles?.Contains("Doctor") ?? false)
+                {
+                    user.AvailabilityStatus = nameof(AvailabilityStatus.Online);
                 }
 
                 var result = await _userManagerServices.RegisterUserAsync(user, request.Password);

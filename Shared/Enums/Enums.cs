@@ -22,6 +22,36 @@ namespace Shared.Enums
         Divorced
     }  
     
+    public enum DoctorSpecialization
+    {
+        [BsonRepresentation(BsonType.String)]
+        General,
+        [BsonRepresentation(BsonType.String)]
+        Heart,
+        [BsonRepresentation(BsonType.String)]
+        Lung
+    }   
+    
+    public enum TeleMedicineRoles
+    {
+        [BsonRepresentation(BsonType.String)]
+        Doctor,
+        [BsonRepresentation(BsonType.String)]
+        Patient,
+        [BsonRepresentation(BsonType.String)]
+        Admin
+    }  
+
+    public enum AvailabilityStatus
+    {
+        [BsonRepresentation(BsonType.String)]
+        Busy,
+        [BsonRepresentation(BsonType.String)]
+        Online,
+        [BsonRepresentation(BsonType.String)]
+        OutOfOffice
+    }  
+    
     public enum FinancialServiceType
     {
         [BsonRepresentation(BsonType.String)]
@@ -74,12 +104,4 @@ namespace Shared.Enums
         ABNegative,
         Unknown
     }   
-    
-    public enum AvailabilityStatus
-    {
-        InVacation,
-        Available
-    }
-
-
 }

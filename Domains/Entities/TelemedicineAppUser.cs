@@ -1,11 +1,6 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
-using Conversions.JsonConverters;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Serializers;
 using MongoDbGenericRepository.Attributes;
-using System.Text.Json.Serialization;
 
 namespace Domains.Entities
 {
@@ -13,7 +8,7 @@ namespace Domains.Entities
     [CollectionName("ApplicationUsers")]
     public class TelemedicineAppUser : MongoIdentityUser<string>
     {
-        
+
         public TelemedicineAppUser() : base()
         {
             DocumentIds = new List<string>();
@@ -29,10 +24,11 @@ namespace Domains.Entities
             HealthIssues = new List<string>();
             Roles = new List<string>();
         }
-       
+
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? NidNumber { get; set; }
+        public bool IsCurrentlyServing { get; set; }
         public float? HeightInCm { get; set; }
         public float? WeightInKg { get; set; }
         public string? Address { get; set; }
@@ -44,7 +40,7 @@ namespace Domains.Entities
         public IEnumerable<string> HealthIssues { get; set; }
         public string? MaritalStatus { get; set; }
         public string? BloodGroup { get; set; }
-        public string? AvailabilityStatus { get; set; }
+        public string? AvailabilityStatus { get; set; } = "Online";//todo
         public string? CountryCode { get; set; } = "+880";
         public IEnumerable<string> DocumentIds { get; set; }
         public IEnumerable<string> Specializations { get; set; }

@@ -171,7 +171,6 @@ namespace Infrastructure.Core.Services.Service
                     {
                         var serviceFilter = Builders<TelemedicineService>.Filter.In(x => x.AssignedDoctorUserId, currentlyFreeDoctorIds);
 
-
                         var docs = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").Aggregate()
                                      .Group(y => y.AssignedDoctorUserId,
                                             z => new XYZP
@@ -198,7 +197,6 @@ namespace Infrastructure.Core.Services.Service
 
                         var serviceFilter = Builders<TelemedicineService>.Filter.In(x => x.AssignedDoctorUserId, currentlyBusyDoctorIds);
 
-
                         var docs = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").Aggregate()
                                         .Group(y => y.AssignedDoctorUserId,
                                             z => new XYZP
@@ -206,7 +204,7 @@ namespace Infrastructure.Core.Services.Service
                                                 count = z.Sum(_ => 1),
                                                 Id = z.Key
                                             }
-                                        ).ToList();
+                                        ).ToList(); 
 
                         docs.OrderBy(x => x.count);
 
@@ -256,20 +254,13 @@ namespace Infrastructure.Core.Services.Service
                     return false;
                 }
 
-                var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ItemId, command.ServiceId);
-                var updateDefinition = Builders<TelemedicineService>.Update.Set(x => x.Status, nameof(AppointmentStatus.Resolved));
-
-                var updateResult = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
-                    .UpdateOneAsync(filter, updateDefinition);
-
-
                 var filter2 = Builders<TelemedicineService>.Filter.Eq(x => x.Status, nameof(AppointmentStatus.Ongoing));
-                filter2 &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, command.ServiceId);
+                filter2 &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, command.DoctorId);
 
                 var numberOfservicesforthedoctor = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                     .CountDocumentsAsync(filter2);
 
-                if (numberOfservicesforthedoctor > 1)
+                if (numberOfservicesforthedoctor <= 1)
                 {
                     var filter3 = Builders<TelemedicineAppUser>.Filter.Eq(x => x.Id, command.DoctorId);
                     var updateDefinition3 = Builders<TelemedicineAppUser>.Update.Set(x => x.IsCurrentlyServing, false);
@@ -277,6 +268,11 @@ namespace Infrastructure.Core.Services.Service
                         .UpdateOneAsync(filter3, updateDefinition3);
                 }
 
+                var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ItemId, command.ServiceId);
+                var updateDefinition = Builders<TelemedicineService>.Update.Set(x => x.Status, nameof(AppointmentStatus.Resolved));
+
+                var updateResult = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                    .UpdateOneAsync(filter, updateDefinition);
                 _logger.LogInformation($"In ResolveAppointmentAsync: updateResult: {JsonConvert.SerializeObject(await updateResult)}");
 
                 return true;

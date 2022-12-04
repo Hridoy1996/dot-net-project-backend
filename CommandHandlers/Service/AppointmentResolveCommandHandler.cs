@@ -1,11 +1,9 @@
-﻿using CommandHandlers.Sms;
-using Commands.Service;
+﻿using Commands.Service;
 using Contract;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Shared.Models;
-using System;
 using System.Net;
 
 namespace CommandHandlers.Service
@@ -27,11 +25,11 @@ namespace CommandHandlers.Service
             {
                 _logger.LogInformation($"In AppointmentResolveCommandHandler: request {JsonConvert.SerializeObject(request)}");
 
-                var result = await _appointmentManager.ResolveAppointmentAsync(request?.ServiceId ?? "");
+                var result = await _appointmentManager.ResolveAppointmentAsync(request);
 
                 return new CommonResponseModel { IsSucceed = result, StatusCode = (int)HttpStatusCode.OK };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Error in AppointmentResolveCommandHandler \nMessage: {ex.Message} \nStackTrace: {ex.StackTrace}", ex);
 

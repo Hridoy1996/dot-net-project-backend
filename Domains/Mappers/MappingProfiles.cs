@@ -53,8 +53,8 @@ namespace Domains.Mappers
                .ForMember(
                     dest => dest.ItemId,
                     opt => opt.MapFrom(src => src.Id ?? Guid.NewGuid().ToString())
-                ); 
-            
+                );
+
             CreateMap<Commands.Service.PrescribedMedicine, Domains.Entities.PrescribedMedicine>();
             CreateMap<FeedBackSubmissionCommand, DoctorFeedback>()
                   .ForMember(
@@ -68,11 +68,10 @@ namespace Domains.Mappers
                     opt => opt.MapFrom(src => DateTime.UtcNow)
                 )
                 ;
-            
+
             CreateMap<Domains.Entities.PrescribedMedicine, Domains.ResponseDataModels.PrescribedMedicine>();
             CreateMap<DoctorFeedback, FeedbackResponseModel>();
 
         }
     }
 }
-    

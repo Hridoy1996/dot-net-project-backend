@@ -227,6 +227,8 @@ namespace TeleMedicine_WebService.Controllers
                     return new CommonResponseModel { IsSucceed = true, ResponseMessage = "Invalid payload!", StatusCode = (int)HttpStatusCode.NoContent };
                 }
 
+                command.DoctorId = User.FindFirstValue("UserId");
+
                 return (CommonResponseModel)await _mediator.Send(command);
                   
             }

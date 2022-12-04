@@ -8,7 +8,6 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Shared.Enums;
-using XAct.Messages;
 
 namespace Infrastructure.Core.Services.Service
 {
@@ -143,8 +142,8 @@ namespace Infrastructure.Core.Services.Service
                     service.Status = nameof(AppointmentStatus.Pending);
 
                     var filter = Builders<TelemedicineAppUser>.Filter.AnyIn(x => x.Roles, new List<string> { nameof(TeleMedicineRoles.Doctor) });
-                        filter &= Builders<TelemedicineAppUser>.Filter.In(x => x.AvailabilityStatus, new List<string?> { nameof(AvailabilityStatus.Online) , String.Empty, null});
-                        filter &= Builders<TelemedicineAppUser>.Filter.AnyIn(x => x.Specializations, new List<string> { nameof(DoctorSpecialization.General) });
+                    filter &= Builders<TelemedicineAppUser>.Filter.In(x => x.AvailabilityStatus, new List<string?> { nameof(AvailabilityStatus.Online), String.Empty, null });
+                    filter &= Builders<TelemedicineAppUser>.Filter.AnyIn(x => x.Specializations, new List<string> { nameof(DoctorSpecialization.General) });
 
                     var projectionDefinition = Builders<TelemedicineAppUser>.Projection
                             .Include(doc => doc.Id)
@@ -155,27 +154,27 @@ namespace Infrastructure.Core.Services.Service
                         .Find(filter)
                         .Project(projectionDefinition)
                         .ToList()
-                        ?.Select(x =>  new TelemedicineAppUser { Id = x.GetValue("_id").ToString(), IsCurrentlyServing =  bool.Parse(x.GetValue("IsCurrentlyServing").ToString()) })
+                        ?.Select(x => new TelemedicineAppUser { Id = x.GetValue("_id").ToString(), IsCurrentlyServing = bool.Parse(x.GetValue("IsCurrentlyServing").ToString()) })
                         ?.ToList()
                         ;
 
-                    if(availableGeneralDoctors == null || !availableGeneralDoctors.Any())
+                    if (availableGeneralDoctors == null || !availableGeneralDoctors.Any())
                     {
                         _logger.LogInformation($"In method ResolveAppointmentAsync: no doctor found in database for service {JsonConvert.SerializeObject(service)}");
 
                         return false;
                     }
 
-                    var currentlyFreeDoctorIds = availableGeneralDoctors.Where(x => x.IsCurrentlyServing == false)?.Select(x=>x.Id)?.ToList();
+                    var currentlyFreeDoctorIds = availableGeneralDoctors.Where(x => x.IsCurrentlyServing == false)?.Select(x => x.Id)?.ToList();
 
-                    if(currentlyFreeDoctorIds != null && currentlyFreeDoctorIds.Any())
+                    if (currentlyFreeDoctorIds != null && currentlyFreeDoctorIds.Any())
                     {
                         var serviceFilter = Builders<TelemedicineService>.Filter.In(x => x.AssignedDoctorUserId, currentlyFreeDoctorIds);
 
-                        
+
                         var docs = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s").Aggregate()
                                      .Group(y => y.AssignedDoctorUserId,
-                                            z =>  new XYZP
+                                            z => new XYZP
                                             {
                                                 count = z.Sum(_ => 1),
                                                 Id = z.Key
@@ -185,14 +184,14 @@ namespace Infrastructure.Core.Services.Service
                         docs.OrderBy(x => x.count);
 
                         var docIds = docs.Select(x => x.Id).ToList();
-                        
-                        maika = docIds?.FirstOrDefault()??docs.FirstOrDefault()?.Id ?? currentlyFreeDoctorIds.First();
+
+                        maika = docIds?.FirstOrDefault() ?? docs.FirstOrDefault()?.Id ?? currentlyFreeDoctorIds.First();
                     }
                     else
                     {
                         var currentlyBusyDoctorIds = availableGeneralDoctors.Where(x => x.IsCurrentlyServing == true)?.Select(x => x.Id)?.ToList();
 
-                        if(currentlyBusyDoctorIds==null|| !currentlyBusyDoctorIds.Any())
+                        if (currentlyBusyDoctorIds == null || !currentlyBusyDoctorIds.Any())
                         {
                             return false;
                         }
@@ -213,7 +212,7 @@ namespace Infrastructure.Core.Services.Service
 
                         var docIds = docs.Select(x => x.Id).ToList();
 
-                        maika = docIds?.FirstOrDefault()??docs.FirstOrDefault()?.Id ?? currentlyBusyDoctorIds.First();
+                        maika = docIds?.FirstOrDefault() ?? docs.FirstOrDefault()?.Id ?? currentlyBusyDoctorIds.First();
                     }
                 }
 
@@ -246,32 +245,39 @@ namespace Infrastructure.Core.Services.Service
             }
         }
 
-        public async Task<bool> ResolveAppointmentAsync(string serviceId)
+        public async Task<bool> ResolveAppointmentAsync(AppointmentResolveCommand command)
         {
             try
             {
-                _logger.LogInformation($"In method ResolveAppointmentAsync: serviceId: {serviceId}");
+                _logger.LogInformation($"In method ResolveAppointmentAsync: command: {JsonConvert.SerializeObject(command)}");
 
-                if (string.IsNullOrEmpty(serviceId))
+                if (command == null)
                 {
                     return false;
                 }
 
-
-                var filter2 = Builders<TelemedicineAppUser>.Filter.Eq(x => x.Id, "d");
-                var updateDefinition2 = Builders<TelemedicineAppUser>.Update.Set(x => x.IsCurrentlyServing, false);
-
-                var updateResult2 = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineAppUser>("ApplicationUsers")
-                    .UpdateOneAsync(filter2, updateDefinition2);
-
-
-                var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ItemId, serviceId);
+                var filter = Builders<TelemedicineService>.Filter.Eq(x => x.ItemId, command.ServiceId);
                 var updateDefinition = Builders<TelemedicineService>.Update.Set(x => x.Status, nameof(AppointmentStatus.Resolved));
 
-                var updateResult = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                var updateResult = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                     .UpdateOneAsync(filter, updateDefinition);
 
-                _logger.LogInformation($"In ResolveAppointmentAsync: updateResult: {JsonConvert.SerializeObject(updateResult)}");
+
+                var filter2 = Builders<TelemedicineService>.Filter.Eq(x => x.Status, nameof(AppointmentStatus.Ongoing));
+                filter2 &= Builders<TelemedicineService>.Filter.Eq(x => x.AssignedDoctorUserId, command.ServiceId);
+
+                var numberOfservicesforthedoctor = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
+                    .CountDocumentsAsync(filter2);
+
+                if (numberOfservicesforthedoctor > 1)
+                {
+                    var filter3 = Builders<TelemedicineAppUser>.Filter.Eq(x => x.Id, command.DoctorId);
+                    var updateDefinition3 = Builders<TelemedicineAppUser>.Update.Set(x => x.IsCurrentlyServing, false);
+                    var updateResult3 = await _mongoTeleMedicineDBContext.GetCollection<TelemedicineAppUser>("ApplicationUsers")
+                        .UpdateOneAsync(filter3, updateDefinition3);
+                }
+
+                _logger.LogInformation($"In ResolveAppointmentAsync: updateResult: {JsonConvert.SerializeObject(await updateResult)}");
 
                 return true;
             }
@@ -304,7 +310,7 @@ namespace Infrastructure.Core.Services.Service
                 return false;
             }
         }
-        
+
         public async Task<FeedbackResponseModel> GetFeedbackAsync(string feedbackId, string patiendUserId)
         {
             try
@@ -312,7 +318,7 @@ namespace Infrastructure.Core.Services.Service
                 _logger.LogInformation($"In method GetFeedbackAsync: feedbackId: {feedbackId} patiendUserId {patiendUserId}");
 
                 var filter = Builders<DoctorFeedback>.Filter.Eq(x => x.ItemId, feedbackId);
-                    filter &= Builders<DoctorFeedback>.Filter.Eq(x => x.ApplicantUserId, patiendUserId);
+                filter &= Builders<DoctorFeedback>.Filter.Eq(x => x.ApplicantUserId, patiendUserId);
 
                 var feedBack = await _mongoTeleMedicineDBContext.GetCollection<DoctorFeedback>($"{nameof(DoctorFeedback)}s")
                     .Find(filter)

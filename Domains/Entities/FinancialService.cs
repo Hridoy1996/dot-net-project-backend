@@ -17,7 +17,7 @@ namespace Domains.Entities
         public string? BranchName { get; set; }
         public string? AccountHolderName { get; set; }
         public long AccountNumber { get; set; }
-        public long RoutingNumber { get; set; }
+        public string? RoutingNumber { get; set; }
     }
 
     [BsonIgnoreExtraElements]

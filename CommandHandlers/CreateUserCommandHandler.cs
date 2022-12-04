@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
 using Shared.Models;
+using System;
 using System.Net;
 
 namespace CommandHandler
@@ -54,6 +55,8 @@ namespace CommandHandler
                 }
 
                 var result = await _userManagerServices.RegisterUserAsync(user, request.Password);
+
+                _logger.LogInformation($"In CreateUserCommandHandler result: {result}");
 
                 return new CommonResponseModel { IsSucceed = result, StatusCode = (int)HttpStatusCode.OK };
             }

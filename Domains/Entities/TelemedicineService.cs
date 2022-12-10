@@ -17,6 +17,7 @@ namespace Domains.Entities
         public string? ApplicantUserId { get; set; }
         public string? ApplicantPhoneNumber { get; set; }
         public string? ApplicantUserName { get; set; }
+        public DateTime? PatientDateOfBirth { get; set; }
         public string? ApplicantDisplayName { get; set; }
         public string? ServiceType { get; set; }
         public DateTime StartDate { get; set; }

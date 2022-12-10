@@ -110,6 +110,7 @@ namespace Infrastructure.Core.Services.Service
                         .Select(x =>
                             new ApppointmentResponse
                             {
+                                DateOfBirth = x.PatientDateOfBirth,
                                 PatientUserName = x.ApplicantUserName,
                                 ApplicantUserId = x.ApplicantUserId,
                                 ApplicantDisplayName = x.ApplicantDisplayName,

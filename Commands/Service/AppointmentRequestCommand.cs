@@ -17,6 +17,7 @@ namespace Commands.Service
         public string? ApplicantUserId { get; set; }
         public string? ApplicantUserName { get; set; }
         public string? ApplicantDisplayName { get; set; }
+        public string? ApplicantDateOfBirth { get; set; }
         public string? ServiceType { get; set; }
         public string? ApplicantComment { get; set; }
         public List<PatientData>? PatientFiles { get; set; }

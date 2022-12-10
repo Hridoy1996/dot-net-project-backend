@@ -38,6 +38,10 @@ namespace Domains.Mappers
                 .ForMember(
                     dest => dest.ItemId,
                     opt => opt.MapFrom(src => src.Id ?? Guid.NewGuid().ToString())
+                )
+                .ForMember(
+                    dest => dest.PatientDateOfBirth,
+                    opt => opt.MapFrom(src => src.ApplicantDateOfBirth)
                 );
 
             CreateMap<Domains.Entities.PatientData, Domains.ResponseDataModels.PatientData>();

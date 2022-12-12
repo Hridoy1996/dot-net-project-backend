@@ -2,17 +2,13 @@
 using Contract;
 using Domains.ResponseDataModels;
 using Infrastructure.Core.HelperService;
-using Infrastructure.Core.Managers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver.Core.WireProtocol.Messages;
+using Newtonsoft.Json;
 using Shared.Models;
-using System;
 using System.Net;
-using System.Numerics;
 using System.Security.Claims;
-using XAct.Users;
 
 namespace TeleMedicine_WebService.Controllers
 {
@@ -63,11 +59,11 @@ namespace TeleMedicine_WebService.Controllers
 
                 var appointments = new AppointmentsListResponse();
 
-                if (loggedInUserRole.Contains("Doctor")) 
+                if (loggedInUserRole.Contains("Doctor"))
                 {
                     appointments = await _appointmentManager.GetAppointmentsAsync(searchKey, status, type, loggedInUserId, string.Empty, pageNumber, pageSize);
                 }
-                
+
                 if (loggedInUserRole.Contains("Patient"))
                 {
                     appointments = await _appointmentManager.GetAppointmentsAsync(searchKey, status, type, string.Empty, loggedInUserId, pageNumber, pageSize);
@@ -143,17 +139,19 @@ namespace TeleMedicine_WebService.Controllers
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = exception.Message, StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
-        
+
         [HttpPost]
         [Authorize]
         public async Task<CommonResponseModel> SubmitFeedback([FromBody] FeedBackSubmissionCommand command)
         {
             try
             {
-                if(command == null || string.IsNullOrEmpty(command.ApplicantUserId) || string.IsNullOrEmpty(command.ServiceId))
+                if (command == null || string.IsNullOrEmpty(command.ApplicantUserId) || string.IsNullOrEmpty(command.ServiceId))
                 {
                     return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
                 }
+
+                _logger.LogInformation($"Controller Method SubmitFeedback: FeedBackSubmissionCommand: {JsonConvert.SerializeObject(command)}");
 
                 var loggedInUserRoleString = User.FindFirstValue("Roles");
                 var loggedInUserRole = DataConversions.GetRoles(loggedInUserRoleString);
@@ -174,15 +172,15 @@ namespace TeleMedicine_WebService.Controllers
 
                 return new CommonResponseModel { IsSucceed = false, ResponseMessage = "Server Error!", StatusCode = (int)HttpStatusCode.InternalServerError };
             }
-        }  
-        
+        }
+
         [HttpGet]
         [Authorize]
         public async Task<CommonResponseModel> GetFeedback(string serviceId)
         {
             try
             {
-                if(string.IsNullOrEmpty(serviceId))
+                if (string.IsNullOrEmpty(serviceId))
                 {
                     return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
                 }
@@ -198,13 +196,13 @@ namespace TeleMedicine_WebService.Controllers
 
                 var feedback = await _appointmentManager.GetFeedbackAsync(serviceId, loggedInUserId);
 
-                if (feedback == null) 
+                if (feedback == null)
                 {
-                    return new CommonResponseModel{ IsSucceed = true, StatusCode = (int)HttpStatusCode.NoContent };
+                    return new CommonResponseModel { IsSucceed = true, StatusCode = (int)HttpStatusCode.NoContent };
                 }
                 else
                 {
-                    return new  CommonResponseModel{ IsSucceed = true, ResponseData = feedback, ResponseMessage = "Data found!", StatusCode = (int)HttpStatusCode.OK };
+                    return new CommonResponseModel { IsSucceed = true, ResponseData = feedback, ResponseMessage = "Data found!", StatusCode = (int)HttpStatusCode.OK };
                 }
             }
             catch (Exception exception)
@@ -230,7 +228,7 @@ namespace TeleMedicine_WebService.Controllers
                 command.DoctorId = User.FindFirstValue("UserId");
 
                 return (CommonResponseModel)await _mediator.Send(command);
-                  
+
             }
             catch (Exception exception)
             {

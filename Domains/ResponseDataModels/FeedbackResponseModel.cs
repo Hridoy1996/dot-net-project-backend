@@ -15,6 +15,7 @@
         public string? HeartCondition { get; set; }
         public string? LungConition { get; set; }
         public string? OtoscopeConition { get; set; }
+        public string? ServiceId { get; set; }
     }
     public class PrescribedMedicine
     {

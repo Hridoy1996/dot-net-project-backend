@@ -10,6 +10,7 @@ namespace Commands.Service
             PrescribedMedicines = new List<PrescribedMedicine>();
         }
 
+        public string? ServiceId { get; set; }
         public string? ApplicantUserId { get; set; }
         public string? ApplicantDisplayName { get; set; }
         public List<PrescribedMedicine>? PrescribedMedicines { get; set; }

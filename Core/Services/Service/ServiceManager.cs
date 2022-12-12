@@ -308,13 +308,13 @@ namespace Infrastructure.Core.Services.Service
             }
         }
 
-        public async Task<FeedbackResponseModel> GetFeedbackAsync(string feedbackId, string patiendUserId)
+        public async Task<FeedbackResponseModel> GetFeedbackAsync(string serviceId, string patiendUserId)
         {
             try
             {
-                _logger.LogInformation($"In method GetFeedbackAsync: feedbackId: {feedbackId} patiendUserId {patiendUserId}");
+                _logger.LogInformation($"In method GetFeedbackAsync: serviceId: {serviceId} patiendUserId {patiendUserId}");
 
-                var filter = Builders<DoctorFeedback>.Filter.Eq(x => x.ItemId, feedbackId);
+                var filter = Builders<DoctorFeedback>.Filter.Eq(x => x.ServiceId, serviceId);
                 filter &= Builders<DoctorFeedback>.Filter.Eq(x => x.ApplicantUserId, patiendUserId);
 
                 var feedBack = await _mongoTeleMedicineDBContext.GetCollection<DoctorFeedback>($"{nameof(DoctorFeedback)}s")

@@ -150,7 +150,7 @@ namespace TeleMedicine_WebService.Controllers
         {
             try
             {
-                if(command == null || string.IsNullOrEmpty(command.ApplicantUserId))
+                if(command == null || string.IsNullOrEmpty(command.ApplicantUserId) || string.IsNullOrEmpty(command.ServiceId))
                 {
                     return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
                 }
@@ -178,11 +178,11 @@ namespace TeleMedicine_WebService.Controllers
         
         [HttpGet]
         [Authorize]
-        public async Task<CommonResponseModel> GetFeedback(string feedbackId)
+        public async Task<CommonResponseModel> GetFeedback(string serviceId)
         {
             try
             {
-                if(string.IsNullOrEmpty(feedbackId))
+                if(string.IsNullOrEmpty(serviceId))
                 {
                     return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.BadRequest };
                 }
@@ -196,7 +196,7 @@ namespace TeleMedicine_WebService.Controllers
                     return new CommonResponseModel { IsSucceed = false, StatusCode = (int)HttpStatusCode.Unauthorized };
                 }
 
-                var feedback = await _appointmentManager.GetFeedbackAsync(feedbackId, loggedInUserId);
+                var feedback = await _appointmentManager.GetFeedbackAsync(serviceId, loggedInUserId);
 
                 if (feedback == null) 
                 {

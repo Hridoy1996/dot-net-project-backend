@@ -5,6 +5,7 @@ namespace Domains.Entities
     public class DoctorFeedback : BaseEntity
     {
         public string? ApplicantUserId { get; set; }
+        public string? ServiceId { get; set; }
         public string? ApplicantDisplayName { get; set; }
         public List<PrescribedMedicine>? PrescribedMedicines { get; set; }
         public List<string>? PrescribedTests { get; set; }

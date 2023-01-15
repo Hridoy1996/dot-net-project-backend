@@ -1,7 +1,9 @@
-﻿using Shared.DbEntities.Base;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using Shared.DbEntities.Base;
 
 namespace Domains.Entities
 {
+    [BsonIgnoreExtraElements]
     public class DoctorFeedback : BaseEntity
     {
         public string? ApplicantUserId { get; set; }

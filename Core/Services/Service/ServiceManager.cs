@@ -107,6 +107,7 @@ namespace Infrastructure.Core.Services.Service
                         .Skip(page * size)
                         .Limit(size)
                         .ToList()
+                        .OrderByDescending(x => x.StartDate)
                         .Select(x =>
                             new ApppointmentResponse
                             {

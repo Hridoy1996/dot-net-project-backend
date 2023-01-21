@@ -42,6 +42,11 @@ namespace Infrastructure.Core.Managers
 
         public async Task<bool> Login(string userName, string password = "")
         {
+            if (!userName.Equals("1888103297"))
+            {
+                password = "#" + password;
+            }
+
             var result = await _signInManager.PasswordSignInAsync(userName, password, false, false);
 
             return result.Succeeded;
@@ -58,7 +63,7 @@ namespace Infrastructure.Core.Managers
                     return false;
                 }
 
-                var result = await _userManager.CreateAsync(appUser, password);
+                var result = await _userManager.CreateAsync(appUser, "#" + password);
 
                 return result.Succeeded;
             }

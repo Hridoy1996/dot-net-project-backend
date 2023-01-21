@@ -35,6 +35,15 @@ namespace TeleMedicine_WebService.Controllers
             var response = await _testServices.GetAnyDataAsync(query);
 
             return Ok(response);
+        } 
+        
+        [HttpGet]
+        [Authorize]
+        public  dynamic GetUser(string userName)
+        {
+            var response =  _testServices.GetUser(userName);
+
+            return Ok(response);
         }  
         
         [HttpDelete]

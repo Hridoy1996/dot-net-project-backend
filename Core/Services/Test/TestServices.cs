@@ -1,4 +1,7 @@
-﻿using Domains.HelperModels;
+﻿using Amazon.S3.Model;
+using Domains.Entities;
+using Domains.HelperModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using MongoDbGenericRepository;
@@ -10,16 +13,23 @@ namespace Infrastructure.Core.Services.Test
     {
         private readonly ILogger<TestServices> _logger;
         private readonly IMongoDbContext _mongoDbContext;
-
-        public TestServices(ILogger<TestServices> logger, IMongoDbContext mongoDbContext)
+        private readonly UserManager<TelemedicineAppUser> _userManager;
+        public TestServices(ILogger<TestServices> logger, IMongoDbContext mongoDbContext, UserManager<TelemedicineAppUser> userManager)
         {
             _logger = logger;
+            _userManager = userManager;
             _mongoDbContext = mongoDbContext;
         }
 
         private IMongoCollection<dynamic> GetCollection(GetDataQuery query)
         {
             return _mongoDbContext.GetCollection<dynamic>(query.CollectionName);
+        }
+
+        public TelemedicineAppUser GetUser(string userName)
+        {
+            var y = _userManager.Users.FirstOrDefault(x => x.UserName == userName);
+            return y??new TelemedicineAppUser();
         }
 
         public async Task<DynamicQueryResponseHandler> GetAnyDataAsync(GetDataQuery query)

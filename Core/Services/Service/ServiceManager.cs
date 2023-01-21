@@ -104,10 +104,10 @@ namespace Infrastructure.Core.Services.Service
 
             var apppointments = _mongoTeleMedicineDBContext.GetCollection<TelemedicineService>($"{nameof(TelemedicineService)}s")
                         .Find(filter)
+                        .SortByDescending(x => x.StartDate)
                         .Skip(page * size)
                         .Limit(size)
                         .ToList()
-                        .OrderByDescending(x => x.StartDate)
                         .Select(x =>
                             new ApppointmentResponse
                             {

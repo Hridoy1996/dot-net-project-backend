@@ -38,7 +38,7 @@ namespace Commands.Service
         public string? EcgPdfFileName { get; set; }
         public string? EcgPdfFileId { get; set; }
         public float SpO2 { get; set; }
-        public float Temerature { get; set; }
+        public float Temperature { get; set; }
         public float BloodPressureLow { get; set; }
         public float BloodPressureHigh { get; set; }
         public float HeartRate { get; set; }

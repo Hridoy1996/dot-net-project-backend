@@ -26,7 +26,7 @@ namespace Domains.Mappers
 
             CreateMap<TelemedicineAppUser, UserDataResponse>()
                 .ForMember(
-                    dest => dest.ItemId,
+                    dest => dest.UserId,
                     opt => opt.MapFrom(src => src.Id)
                 );
 

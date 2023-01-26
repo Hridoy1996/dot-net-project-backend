@@ -19,7 +19,6 @@
         public string? CountryName { get; set; }
         public string? ProfileImageId { get; set; }
         public string? OrganizationTitle { get; set; }
-        public string? ItemId { get; set; }
         public string? PhoneNumber { get; set; }
         public float? HeightInCm { get; set; }
         public string? MaritalStatus { get; set; }

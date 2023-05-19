@@ -21,16 +21,19 @@ using MongoDB.Bson.Serialization;
 using MongoDbGenericRepository;
 using Queries.UAM;
 using QueryHandler;
+using Serilog;
 using Shared.DbEntities.MongoDB;
 using StackExchange.Redis;
 using TeleMedicine_WebService.Pipeline;
 
 var builder = WebApplication.CreateBuilder(args);
-    
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+
 var config = builder.Configuration;
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(typeof(CreateUserCommand).Assembly, typeof(CreateUserCommandHandler).Assembly);
@@ -115,6 +118,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
 
 
 

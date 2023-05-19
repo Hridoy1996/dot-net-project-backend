@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Serilog;
 using Shared.Models;
 using System.Net;
 using System.Security.Claims;
@@ -34,8 +35,10 @@ namespace TeleMedicine_WebService.Controllers
         [Authorize]
         public async Task<CommonResponseModel> RequestAServiceAsync([FromBody] AppointmentRequestCommand command)
         {
+
             try
             {
+                _logger.LogInformation("{@Command} = ", command);
                 return (CommonResponseModel)await _mediator.Send(command);
             }
             catch (Exception exception)
